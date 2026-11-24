@@ -46,6 +46,10 @@ Build outputs:
 
 The debug build uses a different signing key from the original publisher and cannot update an installed copy of Launcher+.
 
+## Startup-crash note
+
+The reported `Resources$NotFoundException` for `0x7f090008` was caused by AAPT2 assigning new resource IDs while unreconstructed Launcher3 bytecode still contains the original IDs. `app/legacy-resource-ids.txt` now pins the 592 resource IDs recovered from `public.xml`; the rebuilt APK resolves `0x7f090008` to `dimen/dynamic_grid_edge_margin` instead of an integer. This addresses that specific startup crash. The APK has been rebuilt and its packaged resource table verified, but it still needs to be installed and exercised on a device to confirm runtime behaviour.
+
 ## GitHub Actions
 
 `.github/workflows/android-apk-release.yml` builds the debug and unsigned release APKs, then uploads both to the prerelease named `dev-build`. The `dev-build` tag is a rolling development tag for the `modernized-rebrand` branch. Each branch build updates that tag and replaces the APKs on the same release. The workflow can also be started manually from GitHub Actions.
@@ -60,4 +64,4 @@ The debug build uses a different signing key from the original publisher and can
 - `app/libs/launcher-compile-only.jar` supplies compatibility signatures for the migrated sources and is not packaged.
 - The smali source tree has been removed. This remains a staged reconstruction—not yet a complete, fully de-obfuscated Java rewrite.
 
-Both APK variants have been built locally. Runtime behavior still needs testing on Android 12–16 before this should be treated as a stable daily launcher.
+Both APK variants build locally. The latest resource-ID fix has been verified in the APK resource table; full startup and launcher behaviour still need device testing across Android 12–16 before this should be treated as a stable daily launcher.

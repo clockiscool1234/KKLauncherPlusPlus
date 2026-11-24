@@ -14,6 +14,13 @@ android {
         versionName = "1.0.0-rebrand"
     }
 
+    androidResources {
+        additionalParameters += listOf(
+            "--stable-ids",
+            file("legacy-resource-ids.txt").absolutePath
+        )
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
