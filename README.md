@@ -19,6 +19,7 @@ The original Launcher+ used application ID `nl.ndsc.kitkatlauncher`, version 1.2
 - Create and restore launcher backups without a Pro key.
 - Apply compatible icon packs that use the common `appfilter.xml` format, including Nova-, Apex-, and ADW-style packs.
 - Open the KKLauncher++ GitHub repository from About.
+- Register system broadcast receivers with explicit non-exported status on Android 13 and newer.
 
 ## Build
 
@@ -53,6 +54,7 @@ The debug build uses a different signing key from the original publisher and can
 
 - `app/src/main/AndroidManifest.xml` and `app/src/main/res/` contain the active manifest and Android resources.
 - `app/src/main/java/` contains the Java files currently compiled into the APK, including the rebrand features and compatibility wrappers used by the legacy settings navigation. See `java-migrations.txt` for the list.
+- The recovered `com.android.launcher3.cB` source now compiles into the APK and sets `RECEIVER_NOT_EXPORTED` when registering the launcher's system-only receivers on Android 13+.
 - `app/src/reconstructed/java/` holds recovered Java that is not yet part of the Gradle source set.
 - `app/libs/launcher-legacy.jar` supplies the original bytecode for classes not yet migrated. It is packaged into the APK; it is not the original signed APK.
 - `app/libs/launcher-compile-only.jar` supplies compatibility signatures for the migrated sources and is not packaged.
