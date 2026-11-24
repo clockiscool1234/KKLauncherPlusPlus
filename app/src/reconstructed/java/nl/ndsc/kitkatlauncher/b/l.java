@@ -41,7 +41,7 @@ public final class l extends Fragment {
         if (this.b != null) {
             this.f425a.removeView(this.b);
         }
-        eI.a((int) (a.a.a.c.d.f21a * this.c));
+        eI.a((int) (a.a.a.c.d.a * this.c));
         Drawable drawable = getResources().getDrawable(R.drawable.ic_launcher);
         PagedViewIcon pagedViewIcon = (PagedViewIcon) LayoutInflater.from(getActivity()).inflate(R.layout.apps_customize_application, this.f425a, false);
         pagedViewIcon.setTextSize(2, a.a.a.c.d.b * this.d);

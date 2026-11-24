@@ -246,9 +246,9 @@ public final class C0017al {
         this.p = (int) (f2 * aI.b(this.I, displayMetrics));
         this.q = i;
         this.B = (int) (f3 * aI.a(this.K, displayMetrics));
-        a.a.a.c.d.f21a = aI.a(this.H, displayMetrics);
+        a.a.a.c.d.a = aI.a(this.H, displayMetrics);
         a.a.a.c.d.b = this.I;
-        Log.d("KLP", "Current Dynamic.iconSizePx = " + a.a.a.c.d.f21a);
+        Log.d("KLP", "Current Dynamic.iconSizePx = " + a.a.a.c.d.a);
         Log.d("KLP", "Current Dynamic.iconTextSize = " + a.a.a.c.d.b);
         this.Z = resources.getDimensionPixelSize(R.dimen.dynamic_grid_search_bar_max_width);
         this.aa = resources.getDimensionPixelSize(R.dimen.dynamic_grid_search_bar_height);

@@ -17,8 +17,7 @@ import org.json.JSONObject;
 /* JADX INFO: loaded from: classes.dex */
 public class d {
 
-    /* JADX INFO: renamed from: a, reason: collision with root package name */
-    public static float f21a;
+    public static float a;
     public static float b;
     private final Object[] c;
     private int d;
