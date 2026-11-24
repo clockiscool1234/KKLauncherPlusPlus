@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <CheckBoxPreference android:title="Hide Google Search Bar" android:key="setting_hideqsb_key" />
+    <CheckBoxPreference android:title="Hide Page Indicator" android:key="setting_hide_page_indicator_screen" android:summary="Hide indicator at the bottom of screen" />
+    <Preference android:title="Grid Size" android:key="setting_grid_size_key" />
+    <Preference android:title="Number of Screens" android:key="setting_number_of_screens_key" />
+</PreferenceScreen>

@@ -1,0 +1,16 @@
+version: 3.0.3
+apkFileName: Launcher__1.2.7_APKPure.apk
+usesFramework:
+  ids:
+  - 1
+sdkInfo:
+  minSdkVersion: 16
+  targetSdkVersion: 24
+versionInfo:
+  versionCode: 27
+  versionName: 1.2.7
+resourcesInfo:
+  packageId: 127
+doNotCompress:
+- arsc
+- png

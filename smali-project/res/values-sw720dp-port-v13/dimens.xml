@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="cling_text_block_offset_x">80.0dp</dimen>
+    <dimen name="cling_text_block_offset_y">160.0dp</dimen>
+    <dimen name="scroll_zone">40.0dp</dimen>
+</resources>

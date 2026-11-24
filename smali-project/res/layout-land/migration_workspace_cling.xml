@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.android.launcher3.Cling android:layout_width="match_parent" android:layout_height="match_parent" launcher:drawIdentifier="migration_workspace_landscape"
+  xmlns:android="http://schemas.android.com/apk/res/android" xmlns:launcher="http://schemas.android.com/apk/res-auto/com.android.launcher3">
+    <LinearLayout android:layout_gravity="end|center" android:orientation="vertical" android:id="@id/content" android:paddingRight="60.0dp" android:layout_width="400.0dp" android:layout_height="wrap_content" android:paddingEnd="60.0dp">
+        <LinearLayout android:orientation="horizontal" android:id="@id/migration_workspace_cling_bubble" android:layout_width="match_parent" android:layout_height="wrap_content">
+            <LinearLayout android:orientation="vertical" android:background="@drawable/cling" android:paddingLeft="20.0dp" android:paddingTop="20.0dp" android:paddingRight="20.0dp" android:paddingBottom="20.0dp" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginRight="4.0dp">
+                <TextView android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="@string/workspace_cling_title" style="@style/ClingTitleText" />
+                <TextView android:layout_width="match_parent" android:layout_height="wrap_content" android:text="@string/workspace_cling_move_item" style="@style/ClingText" />
+            </LinearLayout>
+            <ImageView android:layout_gravity="center_vertical" android:layout_width="wrap_content" android:layout_height="wrap_content" android:src="@drawable/cling_arrow_end" />
+        </LinearLayout>
+        <Button android:layout_gravity="right" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginTop="5.0dp" android:onClick="dismissMigrationWorkspaceCling" style="@style/ClingButton" />
+    </LinearLayout>
+</com.android.launcher3.Cling>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:layout_width="match_parent" android:layout_height="match_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout android:orientation="vertical" android:background="#ffffff" android:padding="5.0dp" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="15.0dp" android:layout_marginTop="150.0dp" android:layout_marginRight="15.0dp" android:layout_marginBottom="15.0dp">
+        <TextView android:layout_gravity="left" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="15.0dp" android:text="Icon size" />
+        <SeekBar android:id="@id/iconSizeSeekBar" android:layout_width="match_parent" android:layout_height="wrap_content" android:max="10" android:progress="5" />
+        <TextView android:layout_gravity="center_horizontal" android:id="@id/iconSizePercent" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="100%" />
+    </LinearLayout>
+    <LinearLayout android:orientation="vertical" android:id="@id/textSettingsContainer" android:background="#ffffff" android:padding="5.0dp" android:layout_width="match_parent" android:layout_height="wrap_content" android:layout_marginLeft="15.0dp" android:layout_marginTop="15.0dp" android:layout_marginRight="15.0dp" android:layout_marginBottom="15.0dp">
+        <LinearLayout android:layout_gravity="right" android:orientation="vertical" android:id="@id/textSettingsProLabel" android:background="#c73939" android:padding="2.0dp" android:visibility="gone" android:layout_width="45.0dp" android:layout_height="wrap_content">
+            <TextView android:textAppearance="?android:textAppearanceSmall" android:textColor="#ffffff" android:layout_gravity="center_horizontal" android:id="@id/textView1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="PRO" />
+        </LinearLayout>
+        <TextView android:layout_gravity="left" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="15.0dp" android:text="Text size" />
+        <SeekBar android:id="@id/iconTextSizeSeekBar" android:layout_width="match_parent" android:layout_height="wrap_content" android:max="10" android:progress="5" />
+        <TextView android:layout_gravity="center_horizontal" android:id="@id/iconTextSizePercent" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="100%" />
+        <CheckBox android:id="@id/hideIconTextCheckBox" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="10.0dp" android:text="Hide icon text" />
+    </LinearLayout>
+</LinearLayout>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:layout_gravity="center_horizontal" android:orientation="horizontal" android:layout_width="match_parent" android:layout_height="match_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <LinearLayout android:orientation="vertical" android:layout_width="wrap_content" android:layout_height="match_parent" android:layout_weight="1.0">
+        <TextView android:textAppearance="?android:textAppearanceMedium" android:layout_gravity="center_horizontal" android:id="@id/textView2" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Rows" />
+        <NumberPicker android:layout_gravity="center_horizontal" android:id="@id/rowPicker" android:layout_width="100.0dp" android:layout_height="wrap_content" />
+    </LinearLayout>
+    <LinearLayout android:orientation="vertical" android:layout_width="wrap_content" android:layout_height="match_parent" android:layout_weight="1.0">
+        <TextView android:textAppearance="?android:textAppearanceMedium" android:layout_gravity="center_horizontal" android:id="@id/textView1" android:layout_width="wrap_content" android:layout_height="wrap_content" android:text="Columns" />
+        <NumberPicker android:layout_gravity="center_horizontal" android:id="@id/columnPicker" android:layout_width="100.0dp" android:layout_height="wrap_content" />
+    </LinearLayout>
+</LinearLayout>

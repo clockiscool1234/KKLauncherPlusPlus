@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="settings_home_actions">
+        <item>Do nothing</item>
+        <item>Move to far-left screen</item>
+        <item>Move to center screen</item>
+        <item>Move to far-right screen</item>
+    </string-array>
+    <string-array name="settings_home_actions_values">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+    <string-array name="settings_iconsize">
+        <item>Very small</item>
+        <item>Smaller (pre KitKat)</item>
+        <item>Normal</item>
+    </string-array>
+    <string-array name="settings_iconsize_values">
+        <item>0.6</item>
+        <item>0.8</item>
+        <item>1</item>
+    </string-array>
+    <string-array name="settings_google_now_anim">
+        <item>Slide</item>
+        <item>Fade</item>
+    </string-array>
+    <string-array name="settings_google_now_anim_values">
+        <item>Slide</item>
+        <item>Fade</item>
+    </string-array>
+</resources>

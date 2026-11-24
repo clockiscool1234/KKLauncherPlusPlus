@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical" android:layout_width="match_parent" android:layout_height="match_parent"
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <RadioGroup android:orientation="vertical" android:layout_width="match_parent" android:layout_height="wrap_content">
+        <RadioButton android:id="@id/radioButtonDynamic" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="10.0dp" android:layout_marginTop="10.0dp" android:layout_marginRight="10.0dp" android:text="Dynamic (Default)" />
+        <RadioButton android:id="@id/radioButtonStatic" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_marginLeft="10.0dp" android:layout_marginRight="10.0dp" android:layout_marginBottom="10.0dp" android:text="Static (Specify number)" />
+    </RadioGroup>
+    <LinearLayout android:layout_gravity="center_horizontal" android:orientation="vertical" android:layout_width="match_parent" android:layout_height="wrap_content">
+        <NumberPicker android:layout_gravity="center_horizontal" android:id="@id/numberOfScreensPicker" android:layout_width="100.0dp" android:layout_height="wrap_content" />
+        <TextView android:textAppearance="?android:textAppearanceSmall" android:textColor="#c73939" android:layout_gravity="center_horizontal" android:id="@id/screenRemovalWarning" android:visibility="invisible" android:layout_width="wrap_content" android:layout_height="wrap_content" android:layout_margin="10.0dp" />
+    </LinearLayout>
+</LinearLayout>

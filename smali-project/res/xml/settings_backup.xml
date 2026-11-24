@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <nl.ndsc.kitkatlauncher.ProgressBarPreference android:title="Backup" android:key="setting_backup_key" />
+    <nl.ndsc.kitkatlauncher.ProgressBarPreference android:title="Restore" android:key="setting_restore_key" />
+</PreferenceScreen>

@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <CheckBoxPreference android:title="Hide Page Indicator" android:key="setting_hide_page_indicator_drawer" android:summary="Hide indicator at the bottom of drawer" />
+    <CheckBoxPreference android:title="Remember last drawer page" android:key="setting_restore_last_page_drawer" android:summary="Restore last used drawer page" />
+    <Preference android:title="Hide applications" android:key="setting_hide_apps" android:summary="Hide application-icons in the drawer" />
+    <Preference android:title="Grid Size" android:key="setting_grid_size_drawer_key" />
+</PreferenceScreen>

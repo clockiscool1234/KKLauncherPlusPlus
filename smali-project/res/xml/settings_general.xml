@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+  xmlns:android="http://schemas.android.com/apk/res/android">
+    <SwitchPreference android:title="Enable Google Now" android:key="setting_google_now_enable" android:summary="Show Google Now on the left" />
+    <ListPreference android:entries="@array/settings_google_now_anim" android:title="Google Now reveal animation" android:key="setting_google_now_anim" android:entryValues="@array/settings_google_now_anim_values" />
+    <Preference android:title="Icon Settings" android:key="setting_icons" android:summary="Change icon and text sizes" />
+</PreferenceScreen>

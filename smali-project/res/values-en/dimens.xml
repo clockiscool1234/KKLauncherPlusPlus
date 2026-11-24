@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="cling_title_text_size">22.0sp</dimen>
+    <dimen name="cling_text_size">16.0sp</dimen>
+    <dimen name="cling_alt_title_text_size">30.0sp</dimen>
+    <dimen name="cling_alt_text_size">16.0sp</dimen>
+    <dimen name="cling_hint_text_size">18.0sp</dimen>
+</resources>
