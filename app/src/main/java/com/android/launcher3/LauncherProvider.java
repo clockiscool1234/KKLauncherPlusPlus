@@ -21,8 +21,8 @@ import java.util.ArrayList;
 /* JADX INFO: loaded from: classes.dex */
 public class LauncherProvider extends ContentProvider {
 
-    /* JADX INFO: renamed from: a, reason: collision with root package name */
-    static final Uri f95a = Uri.parse("content://com.clockiscool.kklauncherplusplus.settings/appWidgetReset");
+    static final Uri a = Uri.parse("content://com.clockiscool.kklauncherplusplus.settings/appWidgetReset");
+    static final Uri f95a = a;
     private static boolean c;
     private dB b;
 
