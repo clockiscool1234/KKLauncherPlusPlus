@@ -9,11 +9,11 @@
         <intent><action android:name="com.dlto.atom.launcher.THEME"/></intent>
     </queries>
     <supports-screens android:anyDensity="true" android:largeScreens="true" android:normalScreens="true" android:smallScreens="true" android:xlargeScreens="true"/>
-    <permission android:name="com.clockiscool.kklauncherplusplus.permission.PRELOAD_WORKSPACE" android:permissionGroup="android.permission-group.SYSTEM_TOOLS" android:protectionLevel="signature|privileged"/>
-    <permission android:description="@string/permdesc_install_shortcut" android:label="@string/permlab_install_shortcut" android:name="com.clockiscool.kklauncherplusplus.permission.INSTALL_SHORTCUT" android:permissionGroup="android.permission-group.SYSTEM_TOOLS" android:protectionLevel="dangerous"/>
-    <permission android:description="@string/permdesc_uninstall_shortcut" android:label="@string/permlab_uninstall_shortcut" android:name="com.clockiscool.kklauncherplusplus.permission.UNINSTALL_SHORTCUT" android:permissionGroup="android.permission-group.SYSTEM_TOOLS" android:protectionLevel="dangerous"/>
-    <permission android:description="@string/permdesc_read_settings" android:label="@string/permlab_read_settings" android:name="com.clockiscool.kklauncherplusplus.permission.READ_SETTINGS" android:permissionGroup="android.permission-group.SYSTEM_TOOLS" android:protectionLevel="normal"/>
-    <permission android:description="@string/permdesc_write_settings" android:label="@string/permlab_write_settings" android:name="com.clockiscool.kklauncherplusplus.permission.WRITE_SETTINGS" android:permissionGroup="android.permission-group.SYSTEM_TOOLS" android:protectionLevel="normal"/>
+    <permission android:name="com.clockiscool.kklauncherplusplus.permission.PRELOAD_WORKSPACE" android:protectionLevel="signature|privileged"/>
+    <permission android:description="@string/permdesc_install_shortcut" android:label="@string/permlab_install_shortcut" android:name="com.clockiscool.kklauncherplusplus.permission.INSTALL_SHORTCUT" android:protectionLevel="dangerous"/>
+    <permission android:description="@string/permdesc_uninstall_shortcut" android:label="@string/permlab_uninstall_shortcut" android:name="com.clockiscool.kklauncherplusplus.permission.UNINSTALL_SHORTCUT" android:protectionLevel="dangerous"/>
+    <permission android:description="@string/permdesc_read_settings" android:label="@string/permlab_read_settings" android:name="com.clockiscool.kklauncherplusplus.permission.READ_SETTINGS" android:protectionLevel="normal"/>
+    <permission android:description="@string/permdesc_write_settings" android:label="@string/permlab_write_settings" android:name="com.clockiscool.kklauncherplusplus.permission.WRITE_SETTINGS" android:protectionLevel="normal"/>
     <permission android:name="com.clockiscool.kklauncherplusplus.permission.RECEIVE_LAUNCH_BROADCASTS" android:protectionLevel="signature"/>
     <uses-permission android:name="android.permission.CALL_PHONE" android:required="false"/>
     <uses-permission android:name="android.permission.SET_WALLPAPER"/>
