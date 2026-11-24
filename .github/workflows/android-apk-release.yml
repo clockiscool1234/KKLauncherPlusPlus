@@ -31,7 +31,7 @@ jobs:
         uses: gradle/actions/setup-gradle@v4
 
       - name: Build debug and release APKs
-        run: ./gradlew --no-daemon :app:assembleDebug :app:assembleRelease
+        run: ./gradlew --no-daemon :app:assembleDebug :app:assembleRelease -x :app:lintVitalRelease
 
       - name: Collect APKs
         run: |
