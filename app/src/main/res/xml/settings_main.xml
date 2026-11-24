@@ -6,6 +6,5 @@
     <Preference android:icon="@drawable/ic_action_tiles_large" android:title="Drawer" android:key="pref_main_drawer" android:summary="Customize the application drawer" />
     <Preference android:icon="@drawable/ic_action_puzzle" android:title="Behavior" android:key="pref_main_behavior" android:summary="Change behavior of buttons and actions" />
     <Preference android:icon="@drawable/ic_action_import" android:title="Backup" android:key="pref_main_backup" android:summary="Backup and restore icons and screens" />
-    <Preference android:icon="@drawable/ic_action_info" android:title="About" android:key="pref_main_about" android:summary="Information about Launcher+" />
-    <Preference android:icon="@drawable/ic_action_key" android:title="Limited functionality" android:key="pref_main_prokey" android:summary="Get the key to unlock all features!" />
+    <Preference android:icon="@drawable/ic_action_info" android:title="About" android:key="pref_main_about" android:summary="About KKLauncher++" />
 </PreferenceScreen>

@@ -1,14 +1,16 @@
-package nl.ndsc.kitkatlauncher.b;
+package nl.ndsc.kitkatlauncher.settings;
 
+import a.a.a.c.d;
 import android.os.Bundle;
 import android.preference.ListPreference;
 import android.preference.SwitchPreference;
-import com.android.launcher3.R;
+import nl.ndsc.kitkatlauncher.R;
+import nl.ndsc.kitkatlauncher.b.r;
 
 /* JADX INFO: loaded from: classes.dex */
-public final class g extends r {
+public class GeneralSettingsFragment extends r {
     private void a() {
-        a("setting_google_now_anim", a.a.a.c.d.b(getActivity()));
+        a("setting_google_now_anim", d.b(getActivity()));
     }
 
     private void e() {
@@ -24,7 +26,10 @@ public final class g extends r {
     protected final void a(String str) {
         super.a(str);
         if (str.equals("setting_icons")) {
-            b().a(new l());
+            b().a(new nl.ndsc.kitkatlauncher.b.l());
+        }
+        if (str.equals("setting_icon_pack")) {
+            com.android.launcher3.IconPackSupport.showPicker(getActivity());
         }
     }
 

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen
   xmlns:android="http://schemas.android.com/apk/res/android">
-    <Preference android:icon="@drawable/ic_action_github" android:title="Github" android:key="setting_about_github" android:summary="AOSP code used for this launcher" />
-    <Preference android:icon="@drawable/ic_action_google_play" android:title="Google Play Store" android:key="setting_about_playstore" android:summary="View all my apps on the Google Play Store" />
-    <Preference android:icon="@drawable/ic_action_gear" android:title="Application Version" android:key="setting_about_version" android:summary="1.0.12 PRO" />
+    <Preference android:icon="@drawable/ic_action_github" android:title="GitHub repository" android:key="setting_about_github" android:summary="Source code and project updates" />
+    <Preference android:icon="@drawable/ic_action_gear" android:title="Application Version" android:key="setting_about_version" android:summary="1.0.0-rebrand" />
 </PreferenceScreen>

@@ -2,7 +2,7 @@
 <resources>
     <string name="wallpaper_instructions">Määra taustapilt</string>
     <string name="pick_wallpaper">Taustapildid</string>
-    <string name="application_name">Käivitaja</string>
+    <string name="application_name">KKLauncher++</string>
     <string name="home">Kodu</string>
     <string name="uid_name">Androidi tuumrakendused</string>
     <string name="folder_name" />

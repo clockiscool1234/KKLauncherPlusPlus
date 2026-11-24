@@ -7,11 +7,11 @@ android {
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "nl.ndsc.kitkatlauncher"
-        minSdk = 16
-        targetSdk = 19
-        versionCode = 27
-        versionName = "1.2.7"
+        applicationId = "com.clockiscool.kklauncherplusplus"
+        minSdk = 24
+        targetSdk = 36
+        versionCode = 10000
+        versionName = "1.0.0-rebrand"
     }
 
     compileOptions {
@@ -21,5 +21,6 @@ android {
 }
 
 dependencies {
-    implementation(files("libs/launcher-legacy.jar"))
+    compileOnly(files("libs/launcher-compile-only.jar"))
+    runtimeOnly(files("libs/launcher-legacy.jar"))
 }

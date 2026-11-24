@@ -4,6 +4,7 @@ import nl.ndsc.kitkatlauncher.R;
 
 import android.content.ContentProvider;
 import android.content.ContentProviderResult;
+import android.content.OperationApplicationException;
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
@@ -21,7 +22,7 @@ import java.util.ArrayList;
 public class LauncherProvider extends ContentProvider {
 
     /* JADX INFO: renamed from: a, reason: collision with root package name */
-    static final Uri f95a = Uri.parse("content://nl.ndsc.kitkatlauncher.settings/appWidgetReset");
+    static final Uri f95a = Uri.parse("content://com.clockiscool.kklauncherplusplus.settings/appWidgetReset");
     private static boolean c;
     private dB b;
 
@@ -46,7 +47,7 @@ public class LauncherProvider extends ContentProvider {
 
     static /* synthetic */ void a(SQLiteDatabase sQLiteDatabase, long j) {
         dC dCVar = new dC(dF.a(j, false), null, null);
-        sQLiteDatabase.delete(dCVar.f259a, dCVar.b, dCVar.c);
+        sQLiteDatabase.delete(dCVar.a, dCVar.b, dCVar.c);
     }
 
     private void a(Uri uri) {
@@ -87,8 +88,8 @@ public class LauncherProvider extends ContentProvider {
             if (i != 0) {
                 editorEdit.putInt("DEFAULT_WORKSPACE_RESOURCE_ID", i);
             }
-            this.b.a(this.b.getWritableDatabase(), i2);
-            this.b.d();
+            dB.a(this.b, this.b.getWritableDatabase(), i2);
+            dB.a(this.b);
             editorEdit.commit();
         }
     }
@@ -102,7 +103,7 @@ public class LauncherProvider extends ContentProvider {
     }
 
     @Override // android.content.ContentProvider
-    public ContentProviderResult[] applyBatch(ArrayList arrayList) {
+    public ContentProviderResult[] applyBatch(ArrayList arrayList) throws OperationApplicationException {
         SQLiteDatabase writableDatabase = this.b.getWritableDatabase();
         writableDatabase.beginTransaction();
         try {
@@ -131,7 +132,7 @@ public class LauncherProvider extends ContentProvider {
             int length = contentValuesArr.length;
             for (int i = 0; i < length; i++) {
                 a(contentValuesArr[i]);
-                if (b(this.b, writableDatabase, dCVar.f259a, null, contentValuesArr[i]) < 0) {
+                if (b(this.b, writableDatabase, dCVar.a, null, contentValuesArr[i]) < 0) {
                     writableDatabase.endTransaction();
                     return 0;
                 }
@@ -170,7 +171,7 @@ public class LauncherProvider extends ContentProvider {
     @Override // android.content.ContentProvider
     public int delete(Uri uri, String str, String[] strArr) {
         dC dCVar = new dC(uri, str, strArr);
-        int iDelete = this.b.getWritableDatabase().delete(dCVar.f259a, dCVar.b, dCVar.c);
+        int iDelete = this.b.getWritableDatabase().delete(dCVar.a, dCVar.b, dCVar.c);
         if (iDelete > 0) {
             a(uri);
         }
@@ -193,7 +194,7 @@ public class LauncherProvider extends ContentProvider {
     @Override // android.content.ContentProvider
     public String getType(Uri uri) {
         dC dCVar = new dC(uri, null, null);
-        return TextUtils.isEmpty(dCVar.b) ? "vnd.android.cursor.dir/" + dCVar.f259a : "vnd.android.cursor.item/" + dCVar.f259a;
+        return TextUtils.isEmpty(dCVar.b) ? "vnd.android.cursor.dir/" + dCVar.a : "vnd.android.cursor.item/" + dCVar.a;
     }
 
     @Override // android.content.ContentProvider
@@ -201,7 +202,7 @@ public class LauncherProvider extends ContentProvider {
         dC dCVar = new dC(uri);
         SQLiteDatabase writableDatabase = this.b.getWritableDatabase();
         a(contentValues);
-        long jB = b(this.b, writableDatabase, dCVar.f259a, null, contentValues);
+        long jB = b(this.b, writableDatabase, dCVar.a, null, contentValues);
         if (jB <= 0) {
             return null;
         }
@@ -221,7 +222,7 @@ public class LauncherProvider extends ContentProvider {
     public Cursor query(Uri uri, String[] strArr, String str, String[] strArr2, String str2) {
         dC dCVar = new dC(uri, str, strArr2);
         SQLiteQueryBuilder sQLiteQueryBuilder = new SQLiteQueryBuilder();
-        sQLiteQueryBuilder.setTables(dCVar.f259a);
+        sQLiteQueryBuilder.setTables(dCVar.a);
         Cursor cursorQuery = sQLiteQueryBuilder.query(this.b.getWritableDatabase(), strArr, dCVar.b, dCVar.c, null, null, str2);
         cursorQuery.setNotificationUri(getContext().getContentResolver(), uri);
         return cursorQuery;
@@ -231,7 +232,7 @@ public class LauncherProvider extends ContentProvider {
     public int update(Uri uri, ContentValues contentValues, String str, String[] strArr) {
         dC dCVar = new dC(uri, str, strArr);
         a(contentValues);
-        int iUpdate = this.b.getWritableDatabase().update(dCVar.f259a, contentValues, dCVar.b, dCVar.c);
+        int iUpdate = this.b.getWritableDatabase().update(dCVar.a, contentValues, dCVar.b, dCVar.c);
         if (iUpdate > 0) {
             a(uri);
         }

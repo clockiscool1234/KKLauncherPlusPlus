@@ -32,7 +32,7 @@ final class cQ implements Runnable {
             arrayList.add(ContentProviderOperation.newInsert(this.f223a).withValues(contentValues).build());
         }
         try {
-            this.c.applyBatch("nl.ndsc.kitkatlauncher.settings", arrayList);
+            this.c.applyBatch("com.clockiscool.kklauncherplusplus.settings", arrayList);
             synchronized (cO.c) {
                 cO.i.clear();
                 cO.i.addAll(this.b);

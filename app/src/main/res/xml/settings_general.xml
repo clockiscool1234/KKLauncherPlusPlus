@@ -4,4 +4,6 @@
     <SwitchPreference android:title="Enable Google Now" android:key="setting_google_now_enable" android:summary="Show Google Now on the left" />
     <ListPreference android:entries="@array/settings_google_now_anim" android:title="Google Now reveal animation" android:key="setting_google_now_anim" android:entryValues="@array/settings_google_now_anim_values" />
     <Preference android:title="Icon Settings" android:key="setting_icons" android:summary="Change icon and text sizes" />
+    <Preference android:title="Icon Settings" android:key="setting_icons" android:summary="Change icon and text sizes" />
+    <Preference android:title="Icon pack" android:key="setting_icon_pack" android:summary="Choose a compatible icon theme" />
 </PreferenceScreen>

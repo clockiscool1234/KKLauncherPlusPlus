@@ -1,44 +1,61 @@
-# Launcher+ 1.2.7 — recovered Android project
+# KKLauncher++
 
 ## App information
 
-- **App name:** Launcher+
-- **Package/application ID:** `nl.ndsc.kitkatlauncher`
-- **Recovered version:** 1.2.7 (version code 27)
-- **App type:** Android home-screen launcher, based on the Android Launcher3 codebase
-- **Original SDK settings:** minimum API 16 (Android 4.1); target API 19 (Android 4.4)
-- **Branch:** `main` is the recovered baseline. The planned `modernized-rebrand` work is separate and has not been started here.
+- **Name:** KKLauncher++
+- **Application ID:** `com.clockiscool.kklauncherplusplus`
+- **Version:** `1.0.0-rebrand` (version code `10000`)
+- **Minimum Android:** Android 7.0 (API 24)
+- **Target and compile SDK:** Android 16 (API 36)
+- **Base:** Launcher+ 1.2.7, based on the Android Launcher3 codebase
+- **Active development branch:** `modernized-rebrand`
 
-This project preserves the original package ID, version, minimum SDK, and target SDK. It does not yet modernize Android behavior.
+The original Launcher+ used application ID `nl.ndsc.kitkatlauncher`, version 1.2.7, and target SDK 19. KKLauncher++ has a different application ID, so Android treats it as a separate app. Back up your launcher layout before switching.
 
-## Build the APK
+## Features in this branch
+
+- Set the dock to 3, 5, 7, or 9 columns.
+- Hide apps from the drawer without a Pro key.
+- Create and restore launcher backups without a Pro key.
+- Apply compatible icon packs that use the common `appfilter.xml` format, including Nova-, Apex-, and ADW-style packs.
+- Open the KKLauncher++ GitHub repository from About.
+
+## Build
 
 ### Android Studio
 
 1. Open this `android-studio-project` folder in Android Studio.
-2. Allow Gradle to sync. Use JDK 17 and install Android SDK Platform 36 and Build-Tools 36.0.0 if prompted.
-3. Run the `app` module's `assembleDebug` task.
+2. Use JDK 17 and install Android SDK Platform 36 and Build-Tools 36.0.0 if prompted.
+3. Sync Gradle, then run `assembleDebug` or `assembleRelease` for the `app` module.
 
 ### Command line
 
-From this folder, run:
+From this folder, with `ANDROID_HOME` (or `ANDROID_SDK_ROOT`) set to your Android SDK directory, run:
 
 ```bash
-./gradlew :app:assembleDebug
+./gradlew --no-daemon :app:assembleDebug :app:assembleRelease -x :app:lintVitalRelease
 ```
 
-On Windows, run `gradlew.bat :app:assembleDebug`. For command-line builds, set `ANDROID_SDK_ROOT` or `ANDROID_HOME` to your SDK directory if Gradle cannot find it; Android Studio normally writes `local.properties` for you.
+On Windows, use `gradlew.bat` with the same tasks. The Gradle wrapper uses Gradle 8.13 and Android Gradle Plugin 8.13.2. No NDK is needed; the app contains no native libraries. The release command excludes `lintVitalRelease` because inherited Launcher3 code currently fails that release-only lint task.
 
-The debug APK is created at `app/build/outputs/apk/debug/app-debug.apk`. The Gradle wrapper downloads Gradle 8.13 as needed. The project uses Android Gradle Plugin 8.13.2. No NDK is needed; the original APK has no native libraries.
+Build outputs:
 
-## Source layout and current limits
+- `app/build/outputs/apk/debug/app-debug.apk` — signed with the local debug key, for testing.
+- `app/build/outputs/apk/release/app-release-unsigned.apk` — unsigned; sign it with your own release key before distribution.
 
-- `app/src/main/AndroidManifest.xml` and `app/src/main/res/` contain the app manifest and recovered Android resources.
-- `app/src/main/java/nl/ndsc/kitkatlauncher/KLPLauncher.java` is the first migrated Java class and is compiled into the APK.
-- `app/src/reconstructed/java/` holds the readable/reconstructed Java working tree, including renamed helpers such as `CellLayout`, `CellAndSpan`, `ItemConfiguration`, `ViewCluster`, `PositionComparator`, and `RegionDecoder`. These files are not yet all compile-ready and are not part of the active Gradle source set; remaining obfuscated names are left alone where a safe original name is not known.
-- `app/libs/launcher-legacy.jar` supplies the original app classes that have not yet been migrated to Java source. It is packaged into the APK. The smali tree has been removed from the current project.
-- `app/src/main/res/values/recovered_strings.xml` restores English fallback values missing from the decoded resource set.
+The debug build uses a different signing key from the original publisher and cannot update an installed copy of Launcher+.
 
-The successful build proves the project packages; it does not prove complete Android 12–16 runtime compatibility. The original target API is intentionally retained for this baseline, so Android may still show its low-target warning or block installation on newer Android releases. Runtime paths also need device testing before raising the target SDK.
+## GitHub Actions
 
-The debug APK is signed with a local debug key, not the original publisher's private key. It cannot update an installed copy signed by the publisher. Back up launcher data before uninstalling the original app.
+`.github/workflows/android-apk-release.yml` builds the debug and unsigned release APKs, then uploads both to the prerelease named `dev-build`. The `dev-build` tag is a rolling development tag for the `modernized-rebrand` branch. Each branch build updates that tag and replaces the APKs on the same release. The workflow can also be started manually from GitHub Actions.
+
+## Source layout and current limitations
+
+- `app/src/main/AndroidManifest.xml` and `app/src/main/res/` contain the active manifest and Android resources.
+- `app/src/main/java/` contains the Java files currently compiled into the APK, including the rebrand features and compatibility wrappers used by the legacy settings navigation. See `java-migrations.txt` for the list.
+- `app/src/reconstructed/java/` holds recovered Java that is not yet part of the Gradle source set.
+- `app/libs/launcher-legacy.jar` supplies the original bytecode for classes not yet migrated. It is packaged into the APK; it is not the original signed APK.
+- `app/libs/launcher-compile-only.jar` supplies compatibility signatures for the migrated sources and is not packaged.
+- The smali source tree has been removed. This remains a staged reconstruction—not yet a complete, fully de-obfuscated Java rewrite.
+
+Both APK variants have been built locally. Runtime behavior still needs testing on Android 12–16 before this should be treated as a stable daily launcher.

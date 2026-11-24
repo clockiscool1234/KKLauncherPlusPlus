@@ -5,4 +5,5 @@
     <CheckBoxPreference android:title="Hide Page Indicator" android:key="setting_hide_page_indicator_screen" android:summary="Hide indicator at the bottom of screen" />
     <Preference android:title="Grid Size" android:key="setting_grid_size_key" />
     <Preference android:title="Number of Screens" android:key="setting_number_of_screens_key" />
+    <ListPreference android:title="Dock columns" android:key="setting_dock_columns" android:dialogTitle="Dock columns" android:entries="@array/dock_column_entries" android:entryValues="@array/dock_column_values" android:defaultValue="5" android:summary="Number of icons across the dock" />
 </PreferenceScreen>

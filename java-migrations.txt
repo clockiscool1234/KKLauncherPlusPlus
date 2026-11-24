@@ -1,1 +1,26 @@
-nl.ndsc.kitkatlauncher.KLPLauncher
+Java sources compiled into app/src/main/java/:
+
+- a.a.a.c.d
+- com.android.launcher3.Hotseat
+- com.android.launcher3.IconCache
+- com.android.launcher3.IconCacheEntry
+- com.android.launcher3.IconPackSupport
+- com.android.launcher3.LauncherProvider
+- com.android.launcher3.bw
+- com.android.launcher3.cQ
+- com.android.launcher3.dF
+- com.android.launcher3.dG
+- com.android.launcher3.da
+- nl.ndsc.kitkatlauncher.BackupManager
+- nl.ndsc.kitkatlauncher.C0189e
+- nl.ndsc.kitkatlauncher.KLPLauncher
+- nl.ndsc.kitkatlauncher.a.c
+- nl.ndsc.kitkatlauncher.b.a
+- nl.ndsc.kitkatlauncher.b.g
+- nl.ndsc.kitkatlauncher.o
+- nl.ndsc.kitkatlauncher.settings.AboutSettingsFragment
+- nl.ndsc.kitkatlauncher.settings.GeneralSettingsFragment
+
+The b.a and b.g classes are compatibility wrappers required by the legacy settings navigation. The readable implementations are in settings.AboutSettingsFragment and settings.GeneralSettingsFragment.
+
+The remaining recovered Java sources are under app/src/reconstructed/java/ and are not part of the Gradle source set yet. Their names are still partly obfuscated; migrations will proceed incrementally while preserving compatibility with the remaining bytecode.

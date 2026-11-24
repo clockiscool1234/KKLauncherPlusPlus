@@ -135,6 +135,10 @@ public class d {
             editorR7.commit();
         } catch (Exception e6) {
         }
+        SharedPreferences.Editor newSettings = r(context);
+        newSettings.putString("setting_dock_columns", jSONObject.optString("setting_dock_columns", "5"));
+        newSettings.putString("setting_icon_pack", jSONObject.optString("setting_icon_pack", ""));
+        newSettings.apply();
         JSONArray jSONArray = jSONObject.getJSONArray("setting_drawer_hide_apps_v2");
         HashSet hashSet = new HashSet();
         for (int i = 0; i < jSONArray.length(); i++) {
@@ -277,7 +281,7 @@ public class d {
     }
 
     public static nl.ndsc.kitkatlauncher.a.b h(Context context) {
-        return nl.ndsc.kitkatlauncher.a.b.valuesCustom()[Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(context).getString("setting_homebutton_action_key", "1"))];
+        return nl.ndsc.kitkatlauncher.a.b.values()[Integer.parseInt(PreferenceManager.getDefaultSharedPreferences(context).getString("setting_homebutton_action_key", "1"))];
     }
 
     public static void h(Context context, int i) {
@@ -342,6 +346,9 @@ public class d {
             jSONObject.put("setting_google_now_anim", b(context));
             jSONObject.put("setting_icontextsize", o(context));
             jSONObject.put("setting_hide_icontext", g(context));
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+            jSONObject.put("setting_dock_columns", preferences.getString("setting_dock_columns", "5"));
+            jSONObject.put("setting_icon_pack", preferences.getString("setting_icon_pack", ""));
             Set setP = p(context);
             JSONArray jSONArray = new JSONArray();
             Iterator it = setP.iterator();

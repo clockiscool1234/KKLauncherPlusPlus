@@ -58,7 +58,7 @@ public class Hotseat extends FrameLayout {
 
     public final void a(Launcher launcher) {
         this.b = launcher;
-        setOnKeyListener(new ViewOnKeyListenerC0054bv());
+        setOnKeyListener(new bv());
     }
 
     final int b(int i) {
@@ -92,7 +92,7 @@ public class Hotseat extends FrameLayout {
         if (this.b != null) {
             textView.setOnTouchListener(this.b.s());
         }
-        textView.setOnClickListener(new ViewOnClickListenerC0053bu(this));
+        textView.setOnClickListener(new bu(this));
         CellLayout.LayoutParams layoutParams = new CellLayout.LayoutParams(a(this.c), b(this.c), 1, 1);
         layoutParams.j = false;
         this.f88a.a((View) textView, -1, 0, layoutParams, true);
@@ -105,13 +105,22 @@ public class Hotseat extends FrameLayout {
     @Override // android.view.View
     protected void onFinishInflate() {
         super.onFinishInflate();
-        C0017al c0017alA = cB.a().i().a();
-        this.c = c0017alA.D;
+        al profile = cB.a().i().a();
+        String configuredColumns = android.preference.PreferenceManager.getDefaultSharedPreferences(getContext()).getString("setting_dock_columns", "5");
+        try {
+            int columns = Integer.parseInt(configuredColumns);
+            if (columns >= 3 && columns <= 9 && (columns & 1) == 1) {
+                profile.e = columns;
+                profile.D = columns / 2;
+            }
+        } catch (NumberFormatException ignored) {
+        }
+        this.c = profile.D;
         this.f88a = (CellLayout) findViewById(R.id.layout);
-        if (!c0017alA.f || c0017alA.h) {
-            this.f88a.b((int) c0017alA.e, 1);
+        if (!profile.f || profile.h) {
+            this.f88a.b((int) profile.e, 1);
         } else {
-            this.f88a.b(1, (int) c0017alA.e);
+            this.f88a.b(1, (int) profile.e);
         }
         this.f88a.f(true);
         b();
