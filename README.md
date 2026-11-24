@@ -1,41 +1,44 @@
 # Launcher+ 1.2.7 — recovered Android project
 
-Android Studio/Gradle project for the recovered **Launcher+** home-screen app. This is the original-behaviour baseline on `main`; it is not the future `modernized-rebrand` work branch.
-
 ## App information
 
-| Property | Value |
-|---|---|
-| Display name | Launcher+ |
-| Application ID | `nl.ndsc.kitkatlauncher` |
-| Version | 1.2.7 (version code 27) |
-| Original minimum SDK | API 16 (Android 4.1) |
-| Original target SDK | API 19 (Android 4.4) |
+- **App name:** Launcher+
+- **Package/application ID:** `nl.ndsc.kitkatlauncher`
+- **Recovered version:** 1.2.7 (version code 27)
+- **App type:** Android home-screen launcher, based on the Android Launcher3 codebase
+- **Original SDK settings:** minimum API 16 (Android 4.1); target API 19 (Android 4.4)
+- **Branch:** `main` is the recovered baseline. The planned `modernized-rebrand` work is separate and has not been started here.
 
-The Android manifest and Gradle configuration retain the original SDK levels. This intentionally preserves the legacy baseline; it does not remove Android's modern-version warning or claim Android 12–16 compatibility.
+This project preserves the original package ID, version, minimum SDK, and target SDK. It does not yet modernize Android behavior.
 
-## Open and build
+## Build the APK
 
-1. Open this `android-studio-project` folder in Android Studio and let Gradle sync.
-2. Build the debug APK using **Build → Make Project**, or run the Gradle task `:app:assembleDebug`.
+### Android Studio
 
-From a terminal at the project root:
+1. Open this `android-studio-project` folder in Android Studio.
+2. Allow Gradle to sync. Use JDK 17 and install Android SDK Platform 36 and Build-Tools 36.0.0 if prompted.
+3. Run the `app` module's `assembleDebug` task.
+
+### Command line
+
+From this folder, run:
 
 ```bash
 ./gradlew :app:assembleDebug
 ```
 
-On Windows, run `gradlew.bat :app:assembleDebug`. The APK is produced at:
+On Windows, run `gradlew.bat :app:assembleDebug`. For command-line builds, set `ANDROID_SDK_ROOT` or `ANDROID_HOME` to your SDK directory if Gradle cannot find it; Android Studio normally writes `local.properties` for you.
 
-`app/build/outputs/apk/debug/app-debug.apk`
+The debug APK is created at `app/build/outputs/apk/debug/app-debug.apk`. The Gradle wrapper downloads Gradle 8.13 as needed. The project uses Android Gradle Plugin 8.13.2. No NDK is needed; the original APK has no native libraries.
 
-The wrapper uses Gradle 8.13 and Android Gradle Plugin 8.13.2. Install JDK 17, Android SDK Platform 36, and Android SDK Build-Tools 36.0.0. Android Studio normally configures the SDK path; for command-line builds, set `ANDROID_SDK_ROOT` or `ANDROID_HOME`. No NDK is required: the original APK has no native libraries.
+## Source layout and current limits
 
-## Source layout and reconstruction status
+- `app/src/main/AndroidManifest.xml` and `app/src/main/res/` contain the app manifest and recovered Android resources.
+- `app/src/main/java/nl/ndsc/kitkatlauncher/KLPLauncher.java` is the first migrated Java class and is compiled into the APK.
+- `app/src/reconstructed/java/` holds the readable/reconstructed Java working tree, including renamed helpers such as `CellLayout`, `CellAndSpan`, `ItemConfiguration`, `ViewCluster`, `PositionComparator`, and `RegionDecoder`. These files are not yet all compile-ready and are not part of the active Gradle source set; remaining obfuscated names are left alone where a safe original name is not known.
+- `app/libs/launcher-legacy.jar` supplies the original app classes that have not yet been migrated to Java source. It is packaged into the APK. The smali tree has been removed from the current project.
+- `app/src/main/res/values/recovered_strings.xml` restores English fallback values missing from the decoded resource set.
 
-- `app/src/main/java/nl/ndsc/kitkatlauncher/KLPLauncher.java` is the first recovered class compiled from Java. `java-migrations.txt` records the compiled Java classes.
-- `app/src/reconstructed/java/` contains 571 JADX-generated Java files for reading and continued cleanup. Several verified helpers have descriptive names (`CellAndSpan`, `ItemConfiguration`, `ViewCluster`, `PositionComparator`, and `RegionDecoder`); many other classes remain obfuscated or need manual decompiler repairs. This directory is deliberately not part of Gradle's compiled source set yet.
-- `app/libs/launcher-legacy.jar` contains the remaining original app bytecode. It lets the project build without smali while reconstructed Java is migrated incrementally. It is a compiled dependency, not editable source.
-- `app/src/main/res/` and `app/src/main/AndroidManifest.xml` contain the recovered Android resources and manifest. The manifest uses the original package identity and SDK levels.
+The successful build proves the project packages; it does not prove complete Android 12–16 runtime compatibility. The original target API is intentionally retained for this baseline, so Android may still show its low-target warning or block installation on newer Android releases. Runtime paths also need device testing before raising the target SDK.
 
-A clean build was verified with `./gradlew clean :app:assembleDebug`. The output is signed with a new debug key, not the publisher's key, so it cannot update an installed copy signed by the publisher. Keep the original installed until its data and launcher layout are backed up.
+The debug APK is signed with a local debug key, not the original publisher's private key. It cannot update an installed copy signed by the publisher. Back up launcher data before uninstalling the original app.
