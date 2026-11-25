@@ -42,14 +42,14 @@ On Windows, use `gradlew.bat` with the same tasks. The Gradle wrapper uses Gradl
 
 Build outputs:
 
-- `app/build/outputs/apk/debug/app-debug.apk` — signed with the local debug key, for testing.
+- `app/build/outputs/apk/debug/app-debug.apk` — signed with the build environment’s debug key, for testing.
 - `app/build/outputs/apk/release/app-release-unsigned.apk` — unsigned; sign it with your own release key before distribution.
 
-The debug build uses a different signing key from the original publisher and cannot update an installed copy of Launcher+.
+The debug APK uses the build environment’s debug signing key and cannot update an installed copy signed by another key. GitHub-hosted runners are recreated, so successive CI debug APKs may also have different keys; if Android reports a signature mismatch, back up the launcher layout/data before uninstalling the older build.
 
 ## Startup-crash note
 
-The reported `Resources$NotFoundException` for `0x7f090008` was caused by AAPT2 assigning new resource IDs while unreconstructed Launcher3 bytecode still contains the original IDs. `app/legacy-resource-ids.txt` pins the 592 recovered IDs. A later `NoSuchFieldError` came from a decompiled URI field being renamed; the source now exposes the original `dF.a` field descriptor and retains a decompiler-name alias. The `RECEIVER_EXPORTED` crash came from the unmigrated Launcher class calling the old two-argument `registerReceiver`; target SDK is set to 33 until that class is migrated, while the app still runs on Android 12–16. These changes address the reported failures, but startup and launcher behaviour still need device verification.
+The reported `Resources$NotFoundException` for `0x7f090008` was caused by AAPT2 assigning new resource IDs while unreconstructed Launcher3 bytecode still contains the original IDs. `app/legacy-resource-ids.txt` pins the 592 recovered IDs. An earlier `NoSuchFieldError` was fixed by restoring static float fields `a` and `b` in `a.a.a.c.d`; the later URI-field error was fixed by restoring the original `dF.a` field descriptor while retaining the decompiler-name alias. The `RECEIVER_EXPORTED` crash came from the unmigrated Launcher class calling the old two-argument `registerReceiver`; target SDK is set to 33 until that class is migrated, while the app still runs on Android 12–16. The updated APKs build, but startup and launcher behaviour still need device verification.
 
 ## GitHub Actions
 
