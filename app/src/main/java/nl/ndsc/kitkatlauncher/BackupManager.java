@@ -121,7 +121,7 @@ public class BackupManager {
 
     private static JSONArray c() throws Exception {
         byte[] blob;
-        Cursor cursorQuery = f431a.getContentResolver().query(dF.f261a, null, null, null, null);
+        Cursor cursorQuery = f431a.getContentResolver().query(dF.a, null, null, null, null);
         JSONArray jSONArray = new JSONArray();
         while (cursorQuery.moveToNext()) {
             JSONObject jSONObject = new JSONObject();
@@ -159,7 +159,7 @@ public class BackupManager {
 
     private static void d() {
         ContentResolver contentResolver = f431a.getContentResolver();
-        Cursor cursorQuery = contentResolver.query(dF.f261a, null, null, null, null);
+        Cursor cursorQuery = contentResolver.query(dF.a, null, null, null, null);
         ArrayList arrayList = new ArrayList();
         while (cursorQuery.moveToNext()) {
             arrayList.add(Long.valueOf(cursorQuery.getLong(0)));

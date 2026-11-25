@@ -9,7 +9,7 @@ android {
     defaultConfig {
         applicationId = "com.clockiscool.kklauncherplusplus"
         minSdk = 24
-        targetSdk = 36
+        targetSdk = 33
         versionCode = 10000
         versionName = "1.0.0-rebrand"
     }

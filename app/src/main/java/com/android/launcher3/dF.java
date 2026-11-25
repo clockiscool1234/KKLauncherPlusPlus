@@ -6,7 +6,8 @@ import android.net.Uri;
 public final class dF implements dE {
 
     /* JADX INFO: renamed from: a, reason: collision with root package name */
-    public static final Uri f261a = Uri.parse("content://com.clockiscool.kklauncherplusplus.settings/favorites?notify=true");
+    public static final Uri a = Uri.parse("content://com.clockiscool.kklauncherplusplus.settings/favorites?notify=true");
+    public static final Uri f261a = a;
     static final Uri b = Uri.parse("content://com.android.launcher2.settings/favorites?notify=true");
     public static final Uri c = Uri.parse("content://com.clockiscool.kklauncherplusplus.settings/favorites?notify=false");
 

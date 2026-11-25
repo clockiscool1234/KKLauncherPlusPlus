@@ -32,6 +32,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Selection;
@@ -1866,13 +1867,21 @@ public class Launcher extends Activity implements View.OnClickListener, View.OnL
         this.o.b();
     }
 
+    private void registerSystemReceiver(BroadcastReceiver receiver, IntentFilter filter) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            registerReceiver(receiver, filter, Context.RECEIVER_NOT_EXPORTED);
+        } else {
+            registerReceiver(receiver, filter);
+        }
+    }
+
     @Override // android.app.Activity, android.view.Window.Callback
     public void onAttachedToWindow() {
         super.onAttachedToWindow();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction("android.intent.action.SCREEN_OFF");
         intentFilter.addAction("android.intent.action.USER_PRESENT");
-        registerReceiver(this.aw, intentFilter);
+        registerSystemReceiver(this.aw, intentFilter);
         aK.a(getWindow().getDecorView());
         this.W = true;
         this.U = true;
@@ -2150,7 +2159,7 @@ public class Launcher extends Activity implements View.OnClickListener, View.OnL
         }
         this.I = new SpannableStringBuilder();
         Selection.setSelection(this.I, 0);
-        registerReceiver(this.i, new IntentFilter("android.intent.action.CLOSE_SYSTEM_DIALOGS"));
+        registerSystemReceiver(this.i, new IntentFilter("android.intent.action.CLOSE_SYSTEM_DIALOGS"));
         Q();
         e(true);
         if (ActivityManager.isRunningInTestHarness() || !this.aj.getBoolean("launcher.first_run_activity_displayed", false)) {

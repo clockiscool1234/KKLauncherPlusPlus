@@ -6,7 +6,8 @@
 - **Application ID:** `com.clockiscool.kklauncherplusplus`
 - **Version:** `1.0.0-rebrand` (version code `10000`)
 - **Minimum Android:** Android 7.0 (API 24)
-- **Target and compile SDK:** Android 16 (API 36)
+- **Target SDK:** Android 13 (API 33), for compatibility with the original Launcher bytecode’s receiver registrations
+- **Compile SDK:** Android 16 (API 36); runs on Android 12–16
 - **Base:** Launcher+ 1.2.7, based on the Android Launcher3 codebase
 - **Active development branch:** `modernized-rebrand`
 
@@ -19,7 +20,7 @@ The original Launcher+ used application ID `nl.ndsc.kitkatlauncher`, version 1.2
 - Create and restore launcher backups without a Pro key.
 - Apply compatible icon packs that use the common `appfilter.xml` format, including Nova-, Apex-, and ADW-style packs.
 - Open the KKLauncher++ GitHub repository from About.
-- Register system broadcast receivers with explicit non-exported status on Android 13 and newer.
+- Migrated components use explicit non-exported receiver registration; the legacy Launcher core is retained at target SDK 33 until that class is fully migrated.
 
 ## Build
 
@@ -48,7 +49,7 @@ The debug build uses a different signing key from the original publisher and can
 
 ## Startup-crash note
 
-The reported `Resources$NotFoundException` for `0x7f090008` was caused by AAPT2 assigning new resource IDs while unreconstructed Launcher3 bytecode still contains the original IDs. `app/legacy-resource-ids.txt` now pins the 592 resource IDs recovered from `public.xml`; the rebuilt APK resolves `0x7f090008` to `dimen/dynamic_grid_edge_margin` instead of an integer. This addresses that specific startup crash. The APK has been rebuilt and its packaged resource table verified, but it still needs to be installed and exercised on a device to confirm runtime behaviour.
+The reported `Resources$NotFoundException` for `0x7f090008` was caused by AAPT2 assigning new resource IDs while unreconstructed Launcher3 bytecode still contains the original IDs. `app/legacy-resource-ids.txt` pins the 592 recovered IDs. A later `NoSuchFieldError` came from a decompiled URI field being renamed; the source now exposes the original `dF.a` field descriptor and retains a decompiler-name alias. The `RECEIVER_EXPORTED` crash came from the unmigrated Launcher class calling the old two-argument `registerReceiver`; target SDK is set to 33 until that class is migrated, while the app still runs on Android 12–16. These changes address the reported failures, but startup and launcher behaviour still need device verification.
 
 ## GitHub Actions
 
@@ -58,10 +59,10 @@ The reported `Resources$NotFoundException` for `0x7f090008` was caused by AAPT2 
 
 - `app/src/main/AndroidManifest.xml` and `app/src/main/res/` contain the active manifest and Android resources.
 - `app/src/main/java/` contains the Java files currently compiled into the APK, including the rebrand features and compatibility wrappers used by the legacy settings navigation. See `java-migrations.txt` for the list.
-- The recovered `com.android.launcher3.cB` source now compiles into the APK and sets `RECEIVER_NOT_EXPORTED` when registering the launcher's system-only receivers on Android 13+.
+- The recovered `com.android.launcher3.cB` source compiles into the APK and sets `RECEIVER_NOT_EXPORTED` for its system-only receivers. The remaining legacy Launcher receiver calls are why target SDK stays at 33 for now.
 - `app/src/reconstructed/java/` holds recovered Java that is not yet part of the Gradle source set.
 - `app/libs/launcher-legacy.jar` supplies the original bytecode for classes not yet migrated. It is packaged into the APK; it is not the original signed APK.
 - `app/libs/launcher-compile-only.jar` supplies compatibility signatures for the migrated sources and is not packaged.
 - The smali source tree has been removed. This remains a staged reconstruction—not yet a complete, fully de-obfuscated Java rewrite.
 
-Both APK variants build locally. The latest resource-ID fix has been verified in the APK resource table; full startup and launcher behaviour still need device testing across Android 12–16 before this should be treated as a stable daily launcher.
+The APK has buildable source and the resource-ID mapping is preserved. The fixes for the reported startup exceptions are not a substitute for device testing; verify the next APK on the affected Android version before treating this as stable.

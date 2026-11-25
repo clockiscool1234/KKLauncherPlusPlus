@@ -70,7 +70,7 @@ public final class cB implements an {
         IntentFilter intentFilter4 = new IntentFilter();
         intentFilter4.addAction("android.search.action.SEARCHABLES_CHANGED");
         registerSystemReceiver(k, this.c, intentFilter4);
-        k.getContentResolver().registerContentObserver(dF.f261a, true, this.n);
+        k.getContentResolver().registerContentObserver(dF.a, true, this.n);
     }
 
     public static cB a() {
