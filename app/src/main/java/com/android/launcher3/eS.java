@@ -203,24 +203,6 @@ public class eS extends WallpaperCropActivity {
         }
     }
 
-    private Bitmap h() {
-        try (Cursor cursor = getContentResolver().query(
-                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
-                new String[]{"_id", "datetaken"},
-                null,
-                null,
-                "datetaken DESC")) {
-            if (cursor == null || !cursor.moveToFirst()) {
-                return null;
-            }
-            return MediaStore.Images.Thumbnails.getThumbnail(
-                    getContentResolver(),
-                    cursor.getLong(0),
-                    MediaStore.Images.Thumbnails.MINI_KIND,
-                    null);
-        }
-    }
-
     /* JADX INFO: Access modifiers changed from: private */
     public void i() {
         int childCount;
@@ -351,42 +333,40 @@ public class eS extends WallpaperCropActivity {
         FrameLayout frameLayout = (FrameLayout) getLayoutInflater().inflate(R.layout.wallpaper_picker_image_picker_item, (ViewGroup) linearLayout2, false);
         a(frameLayout);
         linearLayout2.addView(frameLayout, 0);
-        if (h() != null) {
-            ImageView imageView = (ImageView) frameLayout.findViewById(R.id.wallpaper_image);
-            imageView.setImageBitmap(h());
-            imageView.setColorFilter(getResources().getColor(R.color.wallpaper_picker_translucent_gray), PorterDuff.Mode.SRC_ATOP);
-        }
         ff c0145ff = new ff();
         frameLayout.setTag(c0145ff);
         c0145ff.a(frameLayout);
         frameLayout.setOnClickListener(this.e);
         if (Build.VERSION.SDK_INT >= 19) {
             File file = new File(getFilesDir(), "default_thumb2.jpg");
-            if (file.exists()) {
-                bitmapCreateBitmap = BitmapFactory.decodeFile(file.getAbsolutePath());
-                zA = true;
-            } else {
+            bitmapCreateBitmap = file.exists() ? BitmapFactory.decodeFile(file.getAbsolutePath()) : null;
+            if (bitmapCreateBitmap == null) {
+                file.delete();
                 new File(getFilesDir(), "default_thumb.jpg").delete();
-                Point pointB = b(getResources());
-                Drawable builtInDrawable = WallpaperManager.getInstance(this).getBuiltInDrawable(pointB.x, pointB.y, true, 0.5f, 0.5f);
-                if (builtInDrawable != null) {
-                    bitmapCreateBitmap = Bitmap.createBitmap(pointB.x, pointB.y, Bitmap.Config.ARGB_8888);
-                    Canvas canvas = new Canvas(bitmapCreateBitmap);
-                    builtInDrawable.setBounds(0, 0, pointB.x, pointB.y);
-                    builtInDrawable.draw(canvas);
-                    canvas.setBitmap(null);
-                } else {
-                    bitmapCreateBitmap = null;
+                try {
+                    Point pointB = b(getResources());
+                    Drawable builtInDrawable = WallpaperManager.getInstance(this).getBuiltInDrawable(pointB.x, pointB.y, true, 0.5f, 0.5f);
+                    if (builtInDrawable != null) {
+                        bitmapCreateBitmap = Bitmap.createBitmap(pointB.x, pointB.y, Bitmap.Config.ARGB_8888);
+                        Canvas canvas = new Canvas(bitmapCreateBitmap);
+                        builtInDrawable.setBounds(0, 0, pointB.x, pointB.y);
+                        builtInDrawable.draw(canvas);
+                        canvas.setBitmap(null);
+                        a(file, bitmapCreateBitmap);
+                    }
+                } catch (RuntimeException exception) {
+                    Log.w("Launcher.WallpaperPickerActivity", "Could not load the current wallpaper preview", exception);
                 }
-                zA = bitmapCreateBitmap != null ? a(file, bitmapCreateBitmap) : false;
             }
-            fe c0144fe = zA ? new fe(new BitmapDrawable(bitmapCreateBitmap)) : null;
-            FrameLayout frameLayout2 = (FrameLayout) a(getLayoutInflater(), (View) null, this.f, c0144fe.a);
-            a(frameLayout2);
-            frameLayout2.setTag(c0144fe);
-            this.f.addView(frameLayout2, 0);
-            frameLayout2.setOnClickListener(this.e);
-            c0144fe.a(frameLayout2);
+            if (bitmapCreateBitmap != null) {
+                fe wallpaperTile = new fe(new BitmapDrawable(getResources(), bitmapCreateBitmap));
+                FrameLayout wallpaperView = (FrameLayout) a(getLayoutInflater(), (View) null, this.f, wallpaperTile.a);
+                a(wallpaperView);
+                wallpaperView.setTag(wallpaperTile);
+                this.f.addView(wallpaperView, 0);
+                wallpaperView.setOnClickListener(this.e);
+                wallpaperTile.a(wallpaperView);
+            }
         }
         this.a.addOnLayoutChangeListener(new eY(this));
         i();

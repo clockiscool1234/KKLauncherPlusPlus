@@ -51,17 +51,22 @@ public class IconCache {
         this.d.put(componentName, entry);
         ComponentName cacheKey = cO.a(resolveInfo);
         if (map == null || !map.containsKey(cacheKey)) {
-            entry.title = resolveInfo.loadLabel(this.c).toString();
+            CharSequence label = resolveInfo.loadLabel(this.c);
+            entry.title = label == null ? resolveInfo.activityInfo.name : label.toString();
             if (map != null) {
                 map.put(cacheKey, entry.title);
             }
         } else {
             entry.title = ((CharSequence) map.get(cacheKey)).toString();
         }
-        if (entry.title == null) {
-            entry.title = resolveInfo.activityInfo.name;
+        String customName = AppCustomizationManager.getNameOverride(this.b, componentName);
+        if (customName != null) {
+            entry.title = customName;
         }
-        Drawable icon = IconPackSupport.loadIcon(this.b, componentName);
+        Drawable icon = AppCustomizationManager.getIconDrawable(this.b, componentName);
+        if (icon == null) {
+            icon = IconPackSupport.loadIcon(this.b, componentName);
+        }
         if (icon == null) {
             icon = a(resolveInfo);
         }

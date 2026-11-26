@@ -92,6 +92,7 @@ public class LauncherProvider extends ContentProvider {
             dB.a(this.b);
             editorEdit.commit();
         }
+        DefaultWorkspaceSeeder.seed(getContext(), this.b.getWritableDatabase());
     }
 
     public final void a(long j) {
@@ -106,13 +107,16 @@ public class LauncherProvider extends ContentProvider {
     public ContentProviderResult[] applyBatch(ArrayList arrayList) throws OperationApplicationException {
         SQLiteDatabase writableDatabase = this.b.getWritableDatabase();
         writableDatabase.beginTransaction();
+        ContentProviderResult[] results;
         try {
-            ContentProviderResult[] contentProviderResultArrApplyBatch = super.applyBatch(arrayList);
+            results = super.applyBatch(arrayList);
             writableDatabase.setTransactionSuccessful();
-            return contentProviderResultArrApplyBatch;
         } finally {
             writableDatabase.endTransaction();
         }
+        a(dF.a);
+        a(dG.f262a);
+        return results;
     }
 
     public final long b() {

@@ -138,7 +138,9 @@ val filteredLegacyJar = tasks.register<Jar>("filteredLegacyJar") {
         exclude(
             "com/android/launcher3/eS.class",
             "com/android/launcher3/eX.class",
+            "com/android/launcher3/cG.class",
             "com/android/launcher3/b.class",
+            "nl/ndsc/kitkatlauncher/b/b.class",
             "nl/ndsc/kitkatlauncher/b/s.class",
         )
     }

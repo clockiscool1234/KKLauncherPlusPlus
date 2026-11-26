@@ -17,7 +17,9 @@ The original Launcher+ used application ID `nl.ndsc.kitkatlauncher`, version 1.2
 ## Features in this branch
 
 - Set the dock to 3, 5, 7, or 9 columns.
-- Hide apps from the drawer and create or restore launcher backups without a Pro key.
+- Rename individual apps and choose custom icons in **Settings → General → App names and icons**. The appearance override can be switched off from that screen.
+- Hide apps from the drawer and create or restore launcher backups without a Pro key. Backup and restore use Android's document picker, so they do not require broad storage permissions; backups include home-screen and dock entries.
+- Seed available Phone, Messages, Browser, Camera, and Gallery/Photos apps into open dock/home-screen positions on first launch, while avoiding duplicate app entries.
 - Apply compatible icon packs using the common `appfilter.xml` format, including Nova-, Apex-, and ADW-style packs.
 - Open the KKLauncher++ GitHub repository from About.
 - Migrated components use explicit non-exported receiver registration. Target SDK remains 33 until the remaining legacy Launcher receiver calls are migrated.
@@ -54,12 +56,13 @@ Debug signing keys are environment-specific. A debug APK may not update an insta
 - Settings navigation is compiled from source. It checks that the optional Pro-key preference exists before removing it, avoiding `removePreference(null)` when the rebrand settings XML omits that entry.
 - The wallpaper picker (`eS`) and its data-set observer (`eX`) are both compiled from Java, so they use matching instance-method calls instead of the incompatible legacy callback that caused `NoSuchMethodError`. The recent-image query avoids the unsupported SQL `LIMIT` sort-order token and closes its cursor.
 - Android 11+ package visibility explicitly queries launcher activities. The app-list model filters KKLauncher++ itself out of its own drawer.
-- Backup listing uses the launcher application context even when Restore is opened before creating a backup. Backups use app-specific storage, are written atomically, and restore in one provider batch. Empty item lists are allowed when at least one launcher screen exists.
+- Backups are created with `ACTION_CREATE_DOCUMENT` and restored with `ACTION_OPEN_DOCUMENT`; the picker grants access only to the selected file. Restore warns that it replaces the current layout. The backup includes dock rows and launcher settings, and restores through one provider batch.
+- A first-run startup crash from calling `String.equals()` on a missing workspace-cling value is fixed with a null-safe comparison.
 - The duplicate `Icon Settings` preference has been removed.
 - The Gradle task `patchLegacyCanvasClasses` changes `Region.Op.REPLACE` field references to `INTERSECT` in the legacy `BubbleTextView` and `Workspace` class files. Modern Android only permits `INTERSECT` and `DIFFERENCE` for `Canvas.clipRect`. The task patches a generated copy of `launcher-legacy.jar`; the checked-in JAR is unchanged.
 - The launcher also contains earlier fixes for the URI-field and receiver-registration crashes reported during testing.
 
-The current branch builds debug and unsigned release APKs locally. Runtime fixes are not considered confirmed until the updated APK has been tried on a device. Emulator testing is currently skipped; the previous Android 12 AVD attempt could not start because the host lacks `/dev/kvm`.
+The debug APK and lint checks build locally with the Android 16 SDK. Runtime changes have not been verified on a physical device; emulator testing is intentionally skipped.
 
 ## GitHub Actions
 
@@ -74,4 +77,4 @@ The current branch builds debug and unsigned release APKs locally. Runtime fixes
 - `app/libs/launcher-compile-only.jar` supplies compatibility signatures for migrated sources and is not packaged. Gradle generates a filtered compile-only copy of the legacy JAR for additional signatures, excluding classes that collide with reconstructed source packages.
 - The smali source tree has been removed. This is a staged reconstruction, not yet a complete, fully de-obfuscated Java rewrite.
 
-The build is reproducible from the checked-in source and legacy JARs. Runtime support across Android 12–16 remains under active device testing.
+The build is reproducible from the checked-in source and legacy JARs. This revision passes a local Android 16 SDK debug build and lint; it has not been tested on a physical device or emulator.

@@ -33,8 +33,8 @@ jobs:
       - name: Set up Gradle
         uses: gradle/actions/setup-gradle@v4
 
-      - name: Build debug and release APKs
-        run: ./gradlew --no-daemon :app:assembleDebug :app:assembleRelease
+      - name: Build APKs and run lint checks
+        run: ./gradlew --no-daemon :app:assembleDebug :app:assembleRelease :app:lint
 
       - name: Collect APKs
         run: |

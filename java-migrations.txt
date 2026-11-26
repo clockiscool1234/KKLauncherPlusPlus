@@ -9,6 +9,9 @@ Java sources compiled into app/src/main/java/:
 - com.android.launcher3.IconCache
 - com.android.launcher3.IconCacheEntry
 - com.android.launcher3.IconPackSupport
+- com.android.launcher3.AppCustomizationManager
+- com.android.launcher3.DefaultWorkspaceSeeder
+- com.android.launcher3.cG
 - com.android.launcher3.LauncherProvider
 - com.android.launcher3.bw
 - com.android.launcher3.cQ
@@ -16,10 +19,12 @@ Java sources compiled into app/src/main/java/:
 - com.android.launcher3.dG
 - com.android.launcher3.da
 - nl.ndsc.kitkatlauncher.BackupManager
+- nl.ndsc.kitkatlauncher.AppCustomizationActivity
 - nl.ndsc.kitkatlauncher.C0189e
 - nl.ndsc.kitkatlauncher.KLPLauncher
 - nl.ndsc.kitkatlauncher.a.c
 - nl.ndsc.kitkatlauncher.b.a
+- nl.ndsc.kitkatlauncher.b.b
 - nl.ndsc.kitkatlauncher.b.g
 - nl.ndsc.kitkatlauncher.b.s
 - nl.ndsc.kitkatlauncher.o
@@ -28,6 +33,6 @@ Java sources compiled into app/src/main/java/:
 
 The b.a and b.g classes are compatibility wrappers required by the legacy settings navigation. The readable implementations are in settings.AboutSettingsFragment and settings.GeneralSettingsFragment.
 
-The wallpaper picker eS and its observer eX are compiled together from Java so the observer calls the matching instance methods, avoiding the legacy NoSuchMethodError. The picker uses a MediaStore sort order without the unsupported SQL LIMIT token and closes its cursor. The app-list class b is compiled from source and filters the launcher's own package from drawer results. BackupManager uses the application context and app-specific files directory, writes backups atomically, and restores launcher data in one provider batch. The settings navigation class nl.ndsc.kitkatlauncher.b.s is compiled from source and safely skips removal when the optional Pro-key preference is absent. The Gradle build patches the legacy BubbleTextView and Workspace class-file references from Region.Op.REPLACE to INTERSECT in a generated copy of launcher-legacy.jar.
+The wallpaper picker eS and its observer eX are compiled together from Java so the observer calls the matching instance methods, avoiding the legacy NoSuchMethodError. The picker uses a MediaStore sort order without the unsupported SQL LIMIT token and closes its cursor. The app-list class b is compiled from source and filters the launcher's own package from drawer results. BackupManager reads and writes through Android's document picker, includes home-screen and dock entries, and restores launcher data in one provider batch. The source cG controller handles the null workspace-cling value that caused a first-launch crash. AppCustomizationManager applies per-app name/icon overrides from the settings screen, while DefaultWorkspaceSeeder inserts available core apps into unused dock/home-screen slots on first launch. The settings navigation class nl.ndsc.kitkatlauncher.b.s is compiled from source and safely skips removal when the optional Pro-key preference is absent. The Gradle build patches the legacy BubbleTextView and Workspace class-file references from Region.Op.REPLACE to INTERSECT in a generated copy of launcher-legacy.jar.
 
 The remaining recovered Java sources are under app/src/reconstructed/java/ and are not part of the Gradle source set yet. Their names are still partly obfuscated; migrations will proceed incrementally while preserving compatibility with the remaining bytecode. The migrated cB source handles Android 13+ dynamic receiver registration with RECEIVER_NOT_EXPORTED for system broadcasts. Hotseat and nl.ndsc.kitkatlauncher.o retain the exact static method/field signatures used by legacy bytecode.

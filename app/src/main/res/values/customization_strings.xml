@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_custom_names_toggle_label" translatable="false">Enable custom names and icons</string>
+    <string name="app_custom_names_help" translatable="false">Choose an app to rename it, select an image for its icon, or reset its appearance. Icon files are selected individually; no broad storage permission is needed.</string>
+</resources>

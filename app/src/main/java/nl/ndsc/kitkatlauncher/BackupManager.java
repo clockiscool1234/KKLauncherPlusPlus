@@ -190,16 +190,21 @@ public class BackupManager {
         return screens;
     }
 
-    public void createBackup() throws Exception {
+    private JSONObject buildBackup() throws Exception {
         JSONArray screens = readScreens();
         if (screens.length() == 0) {
             throw new IOException("No launcher screens found");
         }
         JSONObject backup = new JSONObject();
+        backup.put("formatVersion", 2);
         backup.put("screens", screens);
         backup.put("items", readItems());
         backup.put("settings", d.q(context));
+        return backup;
+    }
 
+    public void createBackup() throws Exception {
+        JSONObject backup = buildBackup();
         File directory = backupDirectory(context);
         File temporary = File.createTempFile("backup-", ".tmp", directory);
         File destination = new File(directory, System.currentTimeMillis() + ".json");
@@ -219,8 +224,46 @@ public class BackupManager {
         }
     }
 
+    public void createBackup(Uri destination) throws Exception {
+        if (destination == null) {
+            throw new IOException("No backup file was selected");
+        }
+        try (java.io.OutputStream output = context.getContentResolver().openOutputStream(destination, "wt")) {
+            if (output == null) {
+                throw new IOException("Could not open the selected file for writing");
+            }
+            output.write(buildBackup().toString().getBytes(StandardCharsets.UTF_8));
+            output.flush();
+        }
+    }
+
     public void restoreBackup(File file) throws Exception {
-        JSONObject backup = readBackup(file);
+        restoreBackup(readBackup(file));
+    }
+
+    public void restoreBackup(Uri source) throws Exception {
+        if (source == null) {
+            throw new IOException("No backup file was selected");
+        }
+        StringBuilder contents = new StringBuilder();
+        java.io.InputStream input = context.getContentResolver().openInputStream(source);
+        if (input == null) {
+            throw new IOException("Could not open the selected backup file");
+        }
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(input, StandardCharsets.UTF_8))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                contents.append(line);
+            }
+        }
+        try {
+            restoreBackup(new JSONObject(contents.toString()));
+        } catch (JSONException exception) {
+            throw new IOException("The selected file is not a valid launcher backup", exception);
+        }
+    }
+
+    private void restoreBackup(JSONObject backup) throws Exception {
         JSONArray items = backup.getJSONArray("items");
         JSONArray screens = backup.getJSONArray("screens");
         if (screens.length() == 0) {

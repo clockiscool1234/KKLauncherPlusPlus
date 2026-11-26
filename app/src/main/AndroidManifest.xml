@@ -24,7 +24,6 @@
     <uses-permission android:name="android.permission.SET_WALLPAPER_HINTS"/>
     <uses-permission android:name="android.permission.VIBRATE" android:required="false"/>
     <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="com.android.launcher.permission.READ_SETTINGS"/>
     <uses-permission android:name="com.android.launcher.permission.WRITE_SETTINGS"/>
     <uses-permission android:name="com.android.launcher3.permission.READ_SETTINGS"/>
@@ -33,7 +32,6 @@
     <uses-permission android:name="com.clockiscool.kklauncherplusplus.permission.READ_SETTINGS"/>
     <uses-permission android:name="com.clockiscool.kklauncherplusplus.permission.WRITE_SETTINGS"/>
     <uses-permission android:name="com.clockiscool.kklauncherplusplus.permission.RECEIVE_LAUNCH_BROADCASTS"/>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-feature android:name="android.hardware.telephony" android:required="false"/>
     <application android:hardwareAccelerated="true" android:icon="@drawable/ic_launcher" android:label="@string/application_name" android:largeHeap="@bool/config_largeHeap" android:name="com.android.launcher3.LauncherApplication" android:supportsRtl="true">
         <activity android:clearTaskOnLaunch="true" android:exported="true" android:launchMode="singleTask" android:name="nl.ndsc.kitkatlauncher.KLPLauncher" android:screenOrientation="nosensor" android:stateNotNeeded="true" android:theme="@style/Theme" android:windowSoftInputMode="adjustPan">
@@ -59,6 +57,7 @@
         </activity>
         <activity android:label="Restore backup" android:name="nl.ndsc.kitkatlauncher.RestoreActivity" android:parentActivityName="nl.ndsc.kitkatlauncher.SettingsActivity" android:theme="@style/HoloLightTheme"/>
         <activity android:label="@string/application_name" android:name="nl.ndsc.kitkatlauncher.SettingsActivity" android:parentActivityName="nl.ndsc.kitkatlauncher.KLPLauncher" android:theme="@style/HoloLightTheme"/>
+        <activity android:exported="false" android:label="Customize apps" android:name="nl.ndsc.kitkatlauncher.AppCustomizationActivity" android:parentActivityName="nl.ndsc.kitkatlauncher.SettingsActivity" android:theme="@style/HoloLightTheme"/>
         <receiver android:exported="true" android:name="com.android.launcher3.PreloadReceiver" android:permission="com.clockiscool.kklauncherplusplus.permission.PRELOAD_WORKSPACE">
             <intent-filter>
                 <action android:name="com.android.launcher3.action.PRELOAD_WORKSPACE"/>
