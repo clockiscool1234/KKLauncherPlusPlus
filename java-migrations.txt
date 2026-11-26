@@ -18,7 +18,8 @@ Java sources compiled into app/src/main/java/:
 - nl.ndsc.kitkatlauncher.KLPLauncher
 - nl.ndsc.kitkatlauncher.a.c
 - nl.ndsc.kitkatlauncher.b.a
-- nl.ndsc.kitkatlauncher.b.g- nl.ndsc.kitkatlauncher.b.s
+- nl.ndsc.kitkatlauncher.b.g
+- nl.ndsc.kitkatlauncher.b.s
 - nl.ndsc.kitkatlauncher.o
 - nl.ndsc.kitkatlauncher.settings.AboutSettingsFragment
 - nl.ndsc.kitkatlauncher.settings.GeneralSettingsFragment
