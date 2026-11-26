@@ -35,10 +35,10 @@ The original Launcher+ used application ID `nl.ndsc.kitkatlauncher`, version 1.2
 From this folder, with `ANDROID_HOME` (or `ANDROID_SDK_ROOT`) set to your Android SDK directory, run:
 
 ```bash
-./gradlew --no-daemon :app:assembleDebug :app:assembleRelease -x :app:lintVitalRelease
+./gradlew --no-daemon :app:assembleDebug :app:assembleRelease
 ```
 
-On Windows, use `gradlew.bat` with the same tasks. The Gradle wrapper uses Gradle 8.13 and Android Gradle Plugin 8.13.2. No NDK is needed; the app contains no native libraries. The release command excludes `lintVitalRelease` because inherited Launcher3 code currently fails that release-only lint task.
+On Windows, use `gradlew.bat` with the same tasks. The Gradle wrapper uses Gradle 8.13 and Android Gradle Plugin 8.13.2. No NDK is needed; the app contains no native libraries. `app/lint-baseline.xml` records existing lint findings inherited from the reconstructed Launcher3 resources and code; new lint findings are still checked during release builds.
 
 Build outputs:
 
@@ -49,7 +49,7 @@ The debug APK uses the build environment’s debug signing key and cannot update
 
 ## Startup-crash note
 
-The reported `Resources$NotFoundException` for `0x7f090008` was caused by AAPT2 assigning new resource IDs while unreconstructed Launcher3 bytecode still contains the original IDs. `app/legacy-resource-ids.txt` pins the 592 recovered IDs. An earlier `NoSuchFieldError` was fixed by restoring static float fields `a` and `b` in `a.a.a.c.d`; the later URI-field error was fixed by restoring the original `dF.a` field descriptor while retaining the decompiler-name alias. The `RECEIVER_EXPORTED` crash came from the unmigrated Launcher class calling the old two-argument `registerReceiver`; target SDK is set to 33 until that class is migrated, while the app still runs on Android 12–16. The updated APKs build, but startup and launcher behaviour still need device verification.
+A reported `Resources$NotFoundException` for `0x7f090008` was caused by AAPT2 assigning new resource IDs while unreconstructed Launcher3 bytecode still contains original IDs. `app/legacy-resource-ids.txt` pins the recovered IDs. An earlier `NoSuchFieldError` was fixed by restoring fields `a` and `b` in `a.a.a.c.d`. The URI-field crash was fixed by restoring `dG.a` as a public static `Uri`, while keeping the readable alias used by Java sources. The `RECEIVER_EXPORTED` crash came from the unmigrated Launcher class calling the old two-argument `registerReceiver`; target SDK remains 33 until that class is migrated. The rebuilt APK installs and starts on an Android 12 AVD, and the reported `dG.a` error no longer appears. This server must use very slow software emulation, which caused Android system ANRs, so verify full launcher behaviour on a physical device or accelerated emulator.
 
 ## GitHub Actions
 
