@@ -39,7 +39,10 @@ public final class s extends r {
         super.onCreate(bundle);
         addPreferencesFromResource(R.xml.settings_main);
         if (nl.ndsc.kitkatlauncher.o.f438a) {
-            getPreferenceScreen().removePreference(findPreference("pref_main_prokey"));
+            android.preference.Preference proKeyPreference = findPreference("pref_main_prokey");
+            if (proKeyPreference != null) {
+                getPreferenceScreen().removePreference(proKeyPreference);
+            }
         }
     }
 

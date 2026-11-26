@@ -71,7 +71,7 @@ public class BubbleTextView extends TextView {
         canvas.save();
         canvas.scale(getScaleX(), getScaleY(), (getWidth() + i3) / 2, (getHeight() + i3) / 2);
         canvas.translate((-getScrollX()) + (i3 / 2), (i3 / 2) + (-getScrollY()));
-        canvas.clipRect(rect, Region.Op.REPLACE);
+        canvas.clipRect(rect);
         draw(canvas);
         canvas.restore();
         this.b.a(bitmapCreateBitmap, canvas, i2, i, 2);

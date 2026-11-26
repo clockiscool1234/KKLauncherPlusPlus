@@ -18,13 +18,13 @@ Java sources compiled into app/src/main/java/:
 - nl.ndsc.kitkatlauncher.KLPLauncher
 - nl.ndsc.kitkatlauncher.a.c
 - nl.ndsc.kitkatlauncher.b.a
-- nl.ndsc.kitkatlauncher.b.g
+- nl.ndsc.kitkatlauncher.b.g- nl.ndsc.kitkatlauncher.b.s
 - nl.ndsc.kitkatlauncher.o
 - nl.ndsc.kitkatlauncher.settings.AboutSettingsFragment
 - nl.ndsc.kitkatlauncher.settings.GeneralSettingsFragment
 
 The b.a and b.g classes are compatibility wrappers required by the legacy settings navigation. The readable implementations are in settings.AboutSettingsFragment and settings.GeneralSettingsFragment.
 
-The wallpaper picker eS is now compiled from app/src/main/java/com/android/launcher3/eS.java. The Gradle build creates a filtered copy of launcher-legacy.jar without its old eS.class, avoiding duplicate definitions while keeping the original library unchanged. eS preserves the original callback bridge signatures and uses a MediaStore sort order without the unsupported SQL LIMIT token.
+The wallpaper picker eS is compiled from app/src/main/java/com/android/launcher3/eS.java. It includes the static adapter callback bridge expected by the old DEX bytecode, uses a MediaStore sort order without the unsupported SQL LIMIT token, and is removed from the packaged legacy JAR to avoid duplicate definitions. The settings navigation class nl.ndsc.kitkatlauncher.b.s is also compiled from source; it safely skips removal when the optional Pro-key preference is absent. The Gradle build patches the legacy BubbleTextView and Workspace class-file references from Region.Op.REPLACE to INTERSECT in a generated copy of launcher-legacy.jar.
 
 The remaining recovered Java sources are under app/src/reconstructed/java/ and are not part of the Gradle source set yet. Their names are still partly obfuscated; migrations will proceed incrementally while preserving compatibility with the remaining bytecode. The migrated cB source handles Android 13+ dynamic receiver registration with RECEIVER_NOT_EXPORTED for system broadcasts. Hotseat and nl.ndsc.kitkatlauncher.o retain the exact static method/field signatures used by legacy bytecode.

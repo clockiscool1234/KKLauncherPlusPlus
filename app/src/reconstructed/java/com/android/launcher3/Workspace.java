@@ -487,7 +487,7 @@ public class Workspace extends AbstractC0138ez implements View.OnTouchListener, 
                 z2 = false;
             }
             canvas.translate((-view.getScrollX()) + (i / 2), (-view.getScrollY()) + (i / 2));
-            canvas.clipRect(rect, Region.Op.REPLACE);
+            canvas.clipRect(rect);
             view.draw(canvas);
             if (z2) {
                 ((FolderIcon) view).a(true);

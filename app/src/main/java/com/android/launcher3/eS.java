@@ -129,6 +129,10 @@ public class eS extends WallpaperCropActivity {
         }
     }
 
+    static void a(eS wallpaperPicker, ViewGroup viewGroup, BaseAdapter baseAdapter, boolean z) {
+        wallpaperPicker.a(viewGroup, baseAdapter, z);
+    }
+
     static void a(FrameLayout frameLayout) {
         frameLayout.setPadding(0, 0, 0, 0);
         frameLayout.setForeground(new fk(frameLayout.getForeground()));
