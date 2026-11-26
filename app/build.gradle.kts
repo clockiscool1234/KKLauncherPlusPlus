@@ -121,6 +121,15 @@ val patchLegacyCanvasClasses = tasks.register("patchLegacyCanvasClasses") {
     }
 }
 
+val compileOnlyLegacyJarFile = layout.buildDirectory.file("compile-only-libs/launcher-legacy-compile-only.jar")
+val compileOnlyLegacyJar = tasks.register<Jar>("compileOnlyLegacyJar") {
+    archiveFileName.set("launcher-legacy-compile-only.jar")
+    destinationDirectory.set(layout.buildDirectory.dir("compile-only-libs"))
+    from(zipTree(file("libs/launcher-legacy.jar"))) {
+        exclude("nl/ndsc/kitkatlauncher/a.class", "nl/ndsc/kitkatlauncher/b.class")
+    }
+}
+
 val filteredLegacyJar = tasks.register<Jar>("filteredLegacyJar") {
     dependsOn(patchLegacyCanvasClasses)
     archiveFileName.set("launcher-legacy-filtered.jar")
@@ -128,7 +137,9 @@ val filteredLegacyJar = tasks.register<Jar>("filteredLegacyJar") {
     from(zipTree(patchedLegacyJarFile)) {
         exclude(
             "com/android/launcher3/eS.class",
-            "nl/ndsc/kitkatlauncher/b/s.class"
+            "com/android/launcher3/eX.class",
+            "com/android/launcher3/b.class",
+            "nl/ndsc/kitkatlauncher/b/s.class",
         )
     }
 }
@@ -164,5 +175,6 @@ android {
 
 dependencies {
     compileOnly(files("libs/launcher-compile-only.jar"))
+    compileOnly(files(compileOnlyLegacyJarFile).builtBy(compileOnlyLegacyJar))
     runtimeOnly(files(filteredLegacyJar))
 }

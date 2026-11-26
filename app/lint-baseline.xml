@@ -525,7 +525,7 @@
         errorLine2="                                                               ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/AndroidManifest.xml"
-            line="56"
+            line="60"
             column="64"/>
     </issue>
 
@@ -536,7 +536,7 @@
         errorLine2="                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/AndroidManifest.xml"
-            line="23"
+            line="27"
             column="36"/>
     </issue>
 
@@ -547,7 +547,7 @@
         errorLine2="                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/AndroidManifest.xml"
-            line="32"
+            line="36"
             column="36"/>
     </issue>
 
@@ -580,7 +580,7 @@
         errorLine2="                                                                                                                                                     ~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/AndroidManifest.xml"
-            line="34"
+            line="38"
             column="150"/>
         <location
             file="src/main/res/values-sw720dp-v13/bools.xml"
@@ -1025,7 +1025,7 @@
         errorLine2="        ~~~~~~~~~~~~~~">
         <location
             file="build.gradle.kts"
-            line="12"
+            line="154"
             column="9"/>
     </issue>
 
@@ -1047,7 +1047,7 @@
         errorLine2="                  ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/AndroidManifest.xml"
-            line="57"
+            line="61"
             column="19"/>
     </issue>
 
@@ -1146,7 +1146,7 @@
         errorLine2="                                                                                                                                                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/AndroidManifest.xml"
-            line="35"
+            line="39"
             column="158"/>
     </issue>
 
@@ -1181,6 +1181,39 @@
             file="src/main/java/com/android/launcher3/IconPackSupport.java"
             line="112"
             column="35"/>
+    </issue>
+
+    <issue
+        id="DiscouragedApi"
+        message="Use of this function is discouraged because resource reflection makes it harder to perform build optimizations and compile-time verification of code. It is much more efficient to retrieve resources by identifier (e.g. `R.foo.bar`) than by name (e.g. `getIdentifier(&quot;bar&quot;, &quot;foo&quot;, null)`)."
+        errorLine1="            int identifier = resources.getIdentifier(str2, &quot;drawable&quot;, str);"
+        errorLine2="                                       ~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/android/launcher3/eS.java"
+            line="75"
+            column="40"/>
+    </issue>
+
+    <issue
+        id="DiscouragedApi"
+        message="Use of this function is discouraged because resource reflection makes it harder to perform build optimizations and compile-time verification of code. It is much more efficient to retrieve resources by identifier (e.g. `R.foo.bar`) than by name (e.g. `getIdentifier(&quot;bar&quot;, &quot;foo&quot;, null)`)."
+        errorLine1="                int identifier2 = resources.getIdentifier(String.valueOf(str2) + &quot;_small&quot;, &quot;drawable&quot;, str);"
+        errorLine2="                                            ~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/android/launcher3/eS.java"
+            line="77"
+            column="45"/>
+    </issue>
+
+    <issue
+        id="DiscouragedApi"
+        message="Use of this function is discouraged because resource reflection makes it harder to perform build optimizations and compile-time verification of code. It is much more efficient to retrieve resources by identifier (e.g. `R.foo.bar`) than by name (e.g. `getIdentifier(&quot;bar&quot;, &quot;foo&quot;, null)`)."
+        errorLine1="            int identifier = system.getIdentifier(&quot;default_wallpaper&quot;, &quot;drawable&quot;, &quot;android&quot;);"
+        errorLine2="                                    ~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/android/launcher3/eS.java"
+            line="296"
+            column="37"/>
     </issue>
 
     <issue
@@ -3302,7 +3335,7 @@
         errorLine2="                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/AndroidManifest.xml"
-            line="25"
+            line="29"
             column="36"/>
     </issue>
 
@@ -3313,7 +3346,7 @@
         errorLine2="                                   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/AndroidManifest.xml"
-            line="27"
+            line="31"
             column="36"/>
     </issue>
 
@@ -3428,6 +3461,28 @@
         message="This folder configuration (`v4`) is unnecessary; `minSdkVersion` is 24. Merge all the resources in this folder into `drawable-xxxhdpi`.">
         <location
             file="src/main/res/drawable-xxxhdpi-v4"/>
+    </issue>
+
+    <issue
+        id="ObsoleteSdkInt"
+        message="Unnecessary; `SDK_INT` is never &lt; 24"
+        errorLine1="        if (Build.VERSION.SDK_INT &lt; 19) {"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/android/launcher3/eS.java"
+            line="294"
+            column="13"/>
+    </issue>
+
+    <issue
+        id="ObsoleteSdkInt"
+        message="Unnecessary; `SDK_INT` is always >= 24"
+        errorLine1="        if (Build.VERSION.SDK_INT >= 19) {"
+        errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~">
+        <location
+            file="src/main/java/com/android/launcher3/eS.java"
+            line="363"
+            column="13"/>
     </issue>
 
     <issue
@@ -3568,17 +3623,6 @@
         message="This folder configuration (`v13`) is unnecessary; `minSdkVersion` is 24. Merge all the resources in this folder into `xml-sw720dp`.">
         <location
             file="src/main/res/xml-sw720dp-v13"/>
-    </issue>
-
-    <issue
-        id="StaticFieldLeak"
-        message="Do not place Android context classes in static fields; this is a memory leak"
-        errorLine1="    private static Context f431a;"
-        errorLine2="            ~~~~~~">
-        <location
-            file="src/main/java/nl/ndsc/kitkatlauncher/BackupManager.java"
-            line="29"
-            column="13"/>
     </issue>
 
     <issue
@@ -3898,7 +3942,7 @@
         errorLine2="            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~">
         <location
             file="src/main/java/com/android/launcher3/Hotseat.java"
-            line="93"
+            line="97"
             column="13"/>
     </issue>
 

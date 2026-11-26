@@ -52,11 +52,14 @@ Debug signing keys are environment-specific. A debug APK may not update an insta
 - AAPT2 resource IDs are pinned in `app/legacy-resource-ids.txt` so unreconstructed Launcher3 bytecode continues to find its original resources.
 - The rebrand preserves the legacy `Hotseat.a(Hotseat)` accessor and `o.a` field expected by old bytecode; Java-source aliases are kept alongside them.
 - Settings navigation is compiled from source. It checks that the optional Pro-key preference exists before removing it, avoiding `removePreference(null)` when the rebrand settings XML omits that entry.
-- The wallpaper picker is compiled from source and restores the static adapter callback bridge expected by old DEX code. Its recent-image query avoids the unsupported SQL `LIMIT` sort-order token and closes its cursor.
+- The wallpaper picker (`eS`) and its data-set observer (`eX`) are both compiled from Java, so they use matching instance-method calls instead of the incompatible legacy callback that caused `NoSuchMethodError`. The recent-image query avoids the unsupported SQL `LIMIT` sort-order token and closes its cursor.
+- Android 11+ package visibility explicitly queries launcher activities. The app-list model filters KKLauncher++ itself out of its own drawer.
+- Backup listing uses the launcher application context even when Restore is opened before creating a backup. Backups use app-specific storage, are written atomically, and restore in one provider batch. Empty item lists are allowed when at least one launcher screen exists.
+- The duplicate `Icon Settings` preference has been removed.
 - The Gradle task `patchLegacyCanvasClasses` changes `Region.Op.REPLACE` field references to `INTERSECT` in the legacy `BubbleTextView` and `Workspace` class files. Modern Android only permits `INTERSECT` and `DIFFERENCE` for `Canvas.clipRect`. The task patches a generated copy of `launcher-legacy.jar`; the checked-in JAR is unchanged.
 - The launcher also contains earlier fixes for the URI-field and receiver-registration crashes reported during testing.
 
-Both debug and unsigned release APKs build locally. GitHub Actions passed for the latest fixes on commit `bb660af` and published updated APKs to the rolling `dev-build` release. These latest runtime fixes have not yet been verified on a physical device; successful builds do not prove that every screen works. A previous Android 12 AVD attempt could not start because the host lacks `/dev/kvm`.
+The current branch builds debug and unsigned release APKs locally. Runtime fixes are not considered confirmed until the updated APK has been tried on a device. Emulator testing is currently skipped; the previous Android 12 AVD attempt could not start because the host lacks `/dev/kvm`.
 
 ## GitHub Actions
 
@@ -68,7 +71,7 @@ Both debug and unsigned release APKs build locally. GitHub Actions passed for th
 - `app/src/main/java/` contains Java sources currently compiled into the APK. See `java-migrations.txt` for the list.
 - `app/src/reconstructed/java/` holds additional recovered Java that is not yet part of the Gradle source set.
 - `app/libs/launcher-legacy.jar` supplies original bytecode for classes not yet migrated. It is packaged into the APK; it is not the original signed APK.
-- `app/libs/launcher-compile-only.jar` supplies compatibility signatures for migrated sources and is not packaged.
+- `app/libs/launcher-compile-only.jar` supplies compatibility signatures for migrated sources and is not packaged. Gradle generates a filtered compile-only copy of the legacy JAR for additional signatures, excluding classes that collide with reconstructed source packages.
 - The smali source tree has been removed. This is a staged reconstruction, not yet a complete, fully de-obfuscated Java rewrite.
 
 The build is reproducible from the checked-in source and legacy JARs. Runtime support across Android 12–16 remains under active device testing.

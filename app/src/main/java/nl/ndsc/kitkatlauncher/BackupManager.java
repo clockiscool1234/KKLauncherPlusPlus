@@ -1,6 +1,7 @@
 package nl.ndsc.kitkatlauncher;
 
 import a.a.a.c.d;
+import android.content.ContentProviderOperation;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -9,222 +10,239 @@ import android.net.Uri;
 import android.util.Base64;
 import com.android.launcher3.dF;
 import com.android.launcher3.dG;
+import com.android.launcher3.cB;
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-/* JADX INFO: renamed from: nl.ndsc.kitkatlauncher.e, reason: case insensitive filesystem */
-/* JADX INFO: loaded from: classes.dex */
 public class BackupManager {
+    private static volatile Context applicationContext;
+    private final Context context;
 
-    /* JADX INFO: renamed from: a, reason: collision with root package name */
-    private static Context f431a;
+    private static final String[] ITEM_COLUMNS = {
+        "_id", "title", "intent", "container", "screen", "cellX", "cellY",
+        "spanX", "spanY", "itemType", "appWidgetId", "iconType", "iconPackage",
+        "iconResource", "uri", "displayMode", "appWidgetProvider"
+    };
 
     public BackupManager(Context context) {
-        f431a = context;
+        this.context = context.getApplicationContext();
+        applicationContext = this.context;
     }
 
-    private static ContentValues a(ContentValues contentValues, JSONObject jSONObject, String str) throws JSONException {
-        String strA = a(jSONObject, str);
-        if (strA != null) {
-            contentValues.put(str, strA);
-        }
-        return contentValues;
+    private static String value(JSONObject object, String key) throws JSONException {
+        return object.isNull(key) ? null : object.getString(key);
     }
 
-    private static String a(JSONObject jSONObject, String str) throws JSONException {
-        if (jSONObject.isNull(str)) {
-            return null;
+    private static ContentValues itemValues(JSONObject object) throws JSONException {
+        ContentValues values = new ContentValues();
+        if (object.getInt("itemType") == 1) {
+            String icon = value(object, "icon");
+            if (icon != null && !icon.isEmpty()) {
+                values.put("icon", Base64.decode(icon, Base64.DEFAULT));
+            }
         }
-        return jSONObject.getString(str);
+        for (String column : ITEM_COLUMNS) {
+            String columnValue = value(object, column);
+            if (columnValue != null) {
+                values.put(column, columnValue);
+            }
+        }
+        return values;
     }
 
-    private static void a(JSONArray jSONArray, boolean z) throws JSONException {
-        ContentResolver contentResolver = f431a.getContentResolver();
-        Uri uri = dG.f262a;
-        int length = jSONArray.length();
-        ContentValues[] contentValuesArr = new ContentValues[length];
-        for (int i = 0; i < length; i++) {
-            JSONObject jSONObject = jSONArray.getJSONObject(i);
-            ContentValues contentValues = new ContentValues();
-            contentValues.put("_id", Integer.valueOf(jSONObject.getInt("id")));
-            contentValues.put("screenRank", Integer.valueOf(jSONObject.getInt("screenRank")));
-            contentValuesArr[i] = contentValues;
+    private static ContentValues screenValues(JSONObject object) throws JSONException {
+        ContentValues values = new ContentValues();
+        values.put("_id", object.getLong("id"));
+        values.put("screenRank", object.getInt("screenRank"));
+        return values;
+    }
+
+    private static File backupDirectory(Context context) throws IOException {
+        File externalDirectory = context.getExternalFilesDir(null);
+        File baseDirectory = externalDirectory != null ? externalDirectory : context.getFilesDir();
+        File directory = new File(baseDirectory, "KitKatLauncherPlus");
+        if (!directory.isDirectory() && !directory.mkdirs() && !directory.isDirectory()) {
+            throw new IOException("Could not create backup directory: " + directory);
         }
-        if (z) {
-            return;
-        }
-        contentResolver.bulkInsert(uri, contentValuesArr);
+        return directory;
     }
 
     public static List listBackups() {
-        File[] fileArrListFiles = backupDirectory().listFiles(new j());
-        Arrays.sort(fileArrListFiles, new k());
-        ArrayList arrayList = new ArrayList();
-        for (File file : fileArrListFiles) {
+        Context context = applicationContext;
+        if (context == null) {
+            context = cB.b();
+        }
+        return context == null ? Collections.emptyList() : listBackups(context);
+    }
+
+    public static List listBackups(Context context) {
+        ArrayList backups = new ArrayList();
+        File[] files;
+        try {
+            files = backupDirectory(context.getApplicationContext()).listFiles(
+                file -> file.isFile() && file.getName().toLowerCase(java.util.Locale.ROOT).endsWith(".json"));
+        } catch (IOException exception) {
+            return backups;
+        }
+        if (files == null) {
+            return backups;
+        }
+        Arrays.sort(files, Comparator.comparing(File::getName).reversed());
+        for (File file : files) {
             try {
-                JSONObject jSONObjectB = readBackup(file);
-                JSONArray jSONArray = jSONObjectB.getJSONArray("items");
-                JSONArray jSONArray2 = jSONObjectB.getJSONArray("screens");
-                nl.ndsc.kitkatlauncher.a.c cVar = new nl.ndsc.kitkatlauncher.a.c();
-                cVar.setBackupFile(file);
-                cVar.setItemCount(jSONArray.length());
-                cVar.setScreenCount(jSONArray2.length());
-                arrayList.add(cVar);
-            } catch (Exception e) {
+                JSONObject backup = readBackup(file);
+                JSONArray items = backup.getJSONArray("items");
+                JSONArray screens = backup.getJSONArray("screens");
+                Object entry = createBackupEntry(file, items.length(), screens.length());
+                backups.add(entry);
+            } catch (Exception ignored) {
             }
         }
-        return arrayList;
+        return backups;
+    }
+
+    private static Object createBackupEntry(File file, int itemCount, int screenCount) throws ReflectiveOperationException {
+        Class<?> entryClass = Class.forName("nl.ndsc.kitkatlauncher.a.c");
+        Object entry = entryClass.getDeclaredConstructor().newInstance();
+        entryClass.getMethod("setBackupFile", File.class).invoke(entry, file);
+        entryClass.getMethod("setItemCount", int.class).invoke(entry, itemCount);
+        entryClass.getMethod("setScreenCount", int.class).invoke(entry, screenCount);
+        return entry;
     }
 
     public static JSONObject readBackup(File file) throws IOException {
-        BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
-        StringBuilder sb = new StringBuilder();
-        for (String line = bufferedReader.readLine(); line != null; line = bufferedReader.readLine()) {
-            sb.append(line);
-        }
-        bufferedReader.close();
-        try {
-            return new JSONObject(sb.toString());
-        } catch (JSONException e) {
-            throw new IOException("Invalid backup JSON", e);
-        }
-    }
-
-    private static void b(JSONArray jSONArray, boolean z) throws JSONException {
-        String strA;
-        ContentResolver contentResolver = f431a.getContentResolver();
-        Uri uri = dF.c;
-        int length = jSONArray.length();
-        ContentValues[] contentValuesArr = new ContentValues[length];
-        for (int i = 0; i < length; i++) {
-            JSONObject jSONObject = jSONArray.getJSONObject(i);
-            ContentValues contentValues = new ContentValues();
-            if (jSONObject.getInt("itemType") == 1 && (strA = a(jSONObject, "icon")) != null && !strA.isEmpty()) {
-                contentValues.put("icon", Base64.decode(strA, 0));
+        StringBuilder contents = new StringBuilder();
+        try (BufferedReader reader = new BufferedReader(new InputStreamReader(
+                new FileInputStream(file), StandardCharsets.UTF_8))) {
+            String line;
+            while ((line = reader.readLine()) != null) {
+                contents.append(line);
             }
-            contentValuesArr[i] = a(a(a(a(a(a(a(a(a(a(a(a(a(a(a(a(a(contentValues, jSONObject, "_id"), jSONObject, "title"), jSONObject, "intent"), jSONObject, "container"), jSONObject, "screen"), jSONObject, "cellX"), jSONObject, "cellY"), jSONObject, "spanX"), jSONObject, "spanY"), jSONObject, "itemType"), jSONObject, "appWidgetId"), jSONObject, "iconType"), jSONObject, "iconPackage"), jSONObject, "iconResource"), jSONObject, "uri"), jSONObject, "displayMode"), jSONObject, "appWidgetProvider");
         }
-        if (z) {
-            return;
+        try {
+            return new JSONObject(contents.toString());
+        } catch (JSONException exception) {
+            throw new IOException("Invalid backup JSON", exception);
         }
-        contentResolver.bulkInsert(uri, contentValuesArr);
     }
 
-    private static JSONArray c() throws Exception {
-        byte[] blob;
-        Cursor cursorQuery = f431a.getContentResolver().query(dF.a, null, null, null, null);
-        JSONArray jSONArray = new JSONArray();
-        while (cursorQuery.moveToNext()) {
-            JSONObject jSONObject = new JSONObject();
-            int i = cursorQuery.getInt(9);
-            if (i != 4) {
-                if (i == 1 && (blob = cursorQuery.getBlob(cursorQuery.getColumnIndexOrThrow("icon"))) != null && blob.length > 0) {
-                    jSONObject.put("icon", Base64.encodeToString(blob, 0));
+    private JSONArray readItems() throws Exception {
+        ContentResolver resolver = context.getContentResolver();
+        JSONArray items = new JSONArray();
+        try (Cursor cursor = resolver.query(dF.a, null, null, null, null)) {
+            if (cursor == null) {
+                throw new IOException("Could not read launcher items");
+            }
+            int itemTypeColumn = cursor.getColumnIndexOrThrow("itemType");
+            while (cursor.moveToNext()) {
+                if (cursor.getInt(itemTypeColumn) == 4) {
+                    continue;
                 }
-                jSONObject.put("_id", cursorQuery.getString(0));
-                jSONObject.put("title", cursorQuery.getString(1));
-                jSONObject.put("intent", cursorQuery.getString(2));
-                jSONObject.put("container", cursorQuery.getString(3));
-                jSONObject.put("screen", cursorQuery.getString(4));
-                jSONObject.put("cellX", cursorQuery.getString(5));
-                jSONObject.put("cellY", cursorQuery.getString(6));
-                jSONObject.put("spanX", cursorQuery.getString(7));
-                jSONObject.put("spanY", cursorQuery.getString(8));
-                jSONObject.put("itemType", cursorQuery.getString(9));
-                jSONObject.put("appWidgetId", cursorQuery.getString(10));
-                jSONObject.put("iconType", cursorQuery.getString(12));
-                jSONObject.put("iconPackage", cursorQuery.getString(13));
-                jSONObject.put("iconResource", cursorQuery.getString(14));
-                jSONObject.put("uri", cursorQuery.getString(16));
-                jSONObject.put("displayMode", cursorQuery.getString(17));
-                jSONObject.put("appWidgetProvider", cursorQuery.getString(18));
-                jSONArray.put(jSONObject);
+                JSONObject item = new JSONObject();
+                for (String column : ITEM_COLUMNS) {
+                    int index = cursor.getColumnIndex(column);
+                    if (index >= 0 && !cursor.isNull(index)) {
+                        item.put(column, cursor.getString(index));
+                    }
+                }
+                int iconIndex = cursor.getColumnIndex("icon");
+                if (cursor.getInt(itemTypeColumn) == 1 && iconIndex >= 0 && !cursor.isNull(iconIndex)) {
+                    byte[] icon = cursor.getBlob(iconIndex);
+                    if (icon != null && icon.length > 0) {
+                        item.put("icon", Base64.encodeToString(icon, Base64.DEFAULT));
+                    }
+                }
+                items.put(item);
             }
         }
-        cursorQuery.close();
-        if (jSONArray.length() == 0) {
-            throw new Exception("No items found");
-        }
-        return jSONArray;
+        return items;
     }
 
-    private static void d() {
-        ContentResolver contentResolver = f431a.getContentResolver();
-        Cursor cursorQuery = contentResolver.query(dF.a, null, null, null, null);
-        ArrayList arrayList = new ArrayList();
-        while (cursorQuery.moveToNext()) {
-            arrayList.add(Long.valueOf(cursorQuery.getLong(0)));
+    private JSONArray readScreens() throws IOException, JSONException {
+        JSONArray screens = new JSONArray();
+        try (Cursor cursor = context.getContentResolver().query(dG.f262a, null, null, null, null)) {
+            if (cursor == null) {
+                throw new IOException("Could not read launcher screens");
+            }
+            int idColumn = cursor.getColumnIndexOrThrow("_id");
+            int rankColumn = cursor.getColumnIndexOrThrow("screenRank");
+            while (cursor.moveToNext()) {
+                JSONObject screen = new JSONObject();
+                screen.put("id", cursor.getLong(idColumn));
+                screen.put("screenRank", cursor.getInt(rankColumn));
+                screens.put(screen);
+            }
         }
-        cursorQuery.close();
-        int size = arrayList.size();
-        for (int i = 0; i < size; i++) {
-            contentResolver.delete(dF.a(((Long) arrayList.get(i)).longValue(), false), null, null);
-        }
+        return screens;
     }
 
-    private static File backupDirectory() {
-        File externalDirectory = f431a.getExternalFilesDir(null);
-        File baseDirectory = externalDirectory != null ? externalDirectory : f431a.getFilesDir();
-        File backupDirectory = new File(baseDirectory, "KitKatLauncherPlus");
-        backupDirectory.mkdirs();
-        return backupDirectory;
-    }
+    public void createBackup() throws Exception {
+        JSONArray screens = readScreens();
+        if (screens.length() == 0) {
+            throw new IOException("No launcher screens found");
+        }
+        JSONObject backup = new JSONObject();
+        backup.put("screens", screens);
+        backup.put("items", readItems());
+        backup.put("settings", d.q(context));
 
-    public final void createBackup() throws Exception {
-        Cursor cursorQuery = f431a.getContentResolver().query(dG.f262a, null, null, null, null);
-        JSONArray jSONArray = new JSONArray();
-        while (cursorQuery.moveToNext()) {
-            JSONObject jSONObject = new JSONObject();
-            jSONObject.put("id", cursorQuery.getString(0));
-            jSONObject.put("screenRank", cursorQuery.getString(1));
-            jSONArray.put(jSONObject);
-        }
-        cursorQuery.close();
-        if (jSONArray.length() == 0) {
-            throw new Exception("No screens found");
-        }
-        JSONArray jSONArrayC = c();
-        JSONObject jSONObjectQ = d.q(f431a);
-        JSONObject jSONObject2 = new JSONObject();
-        jSONObject2.put("screens", jSONArray);
-        jSONObject2.put("items", jSONArrayC);
-        jSONObject2.put("settings", jSONObjectQ);
-        FileWriter fileWriter = new FileWriter(String.valueOf(backupDirectory().getAbsolutePath()) + "/" + (String.valueOf(System.currentTimeMillis() / 1000) + ".json"));
-        fileWriter.write(jSONObject2.toString());
-        fileWriter.flush();
-        fileWriter.close();
-    }
-
-    public final void restoreBackup(File file) throws Exception {
-        JSONObject jSONObject = null;
-        JSONObject jSONObjectB = readBackup(file);
-        if (!((jSONObjectB.getJSONArray("items").length() == 0 || jSONObjectB.getJSONArray("screens").length() == 0) ? false : true)) {
-            throw new Exception("Failed to verify the selected backup");
-        }
-        JSONArray jSONArray = jSONObjectB.getJSONArray("items");
-        a(jSONObjectB.getJSONArray("screens"), true);
-        b(jSONArray, true);
-        f431a.getContentResolver().delete(dG.f262a, null, null);
-        d();
-        JSONArray jSONArray2 = jSONObjectB.getJSONArray("items");
-        JSONArray jSONArray3 = jSONObjectB.getJSONArray("screens");
+        File directory = backupDirectory(context);
+        File temporary = File.createTempFile("backup-", ".tmp", directory);
+        File destination = new File(directory, System.currentTimeMillis() + ".json");
         try {
-            jSONObject = jSONObjectB.getJSONObject("settings");
-        } catch (Exception e) {
+            try (OutputStreamWriter writer = new OutputStreamWriter(
+                    new FileOutputStream(temporary), StandardCharsets.UTF_8)) {
+                writer.write(backup.toString());
+                writer.flush();
+            }
+            if (!temporary.renameTo(destination)) {
+                throw new IOException("Could not finish writing backup");
+            }
+        } finally {
+            if (temporary.exists()) {
+                temporary.delete();
+            }
         }
-        a(jSONArray3, false);
-        b(jSONArray2, false);
-        if (jSONObject != null) {
-            d.a(f431a, jSONObject);
+    }
+
+    public void restoreBackup(File file) throws Exception {
+        JSONObject backup = readBackup(file);
+        JSONArray items = backup.getJSONArray("items");
+        JSONArray screens = backup.getJSONArray("screens");
+        if (screens.length() == 0) {
+            throw new IOException("The selected backup has no launcher screens");
+        }
+
+        ArrayList<ContentProviderOperation> operations = new ArrayList<>();
+        operations.add(ContentProviderOperation.newDelete(dG.f262a).build());
+        operations.add(ContentProviderOperation.newDelete(dF.a).build());
+        for (int i = 0; i < screens.length(); i++) {
+            operations.add(ContentProviderOperation.newInsert(dG.f262a)
+                .withValues(screenValues(screens.getJSONObject(i))).build());
+        }
+        for (int i = 0; i < items.length(); i++) {
+            operations.add(ContentProviderOperation.newInsert(dF.c)
+                .withValues(itemValues(items.getJSONObject(i))).build());
+        }
+        context.getContentResolver().applyBatch(context.getPackageName() + ".settings", operations);
+
+        JSONObject settings = backup.optJSONObject("settings");
+        if (settings != null) {
+            d.a(context, settings);
         }
     }
 }

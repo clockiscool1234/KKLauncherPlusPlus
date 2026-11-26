@@ -88,10 +88,10 @@ public class eS extends WallpaperCropActivity {
     private void a(Uri uri, boolean z) {
         this.k.add(uri);
         FrameLayout frameLayout = (FrameLayout) getLayoutInflater().inflate(R.layout.wallpaper_picker_item, this.f, false);
-        frameLayout.setVisibility(8);
+        frameLayout.setVisibility(View.GONE);
         a(frameLayout);
         this.f.addView(frameLayout, 0);
-        new fc(this, this, uri, b(getResources()), (ImageView) frameLayout.findViewById(R.id.wallpaper_image), frameLayout).execute(new Void[0]);
+        new fc(this, this, uri, b(getResources()), (ImageView) frameLayout.findViewById(R.id.wallpaper_image), frameLayout).execute();
         fh c0147fh = new fh(uri);
         frameLayout.setTag(c0147fh);
         c0147fh.a(frameLayout);
@@ -198,7 +198,7 @@ public class eS extends WallpaperCropActivity {
     /* JADX INFO: Access modifiers changed from: private */
     public void g() {
         HorizontalScrollView horizontalScrollView = (HorizontalScrollView) findViewById(R.id.wallpaper_scroll_container);
-        if (horizontalScrollView.getLayoutDirection() == 1) {
+        if (horizontalScrollView.getLayoutDirection() == View.LAYOUT_DIRECTION_RTL) {
             horizontalScrollView.getViewTreeObserver().addOnGlobalLayoutListener(new fb(this, horizontalScrollView));
         }
     }
@@ -399,7 +399,7 @@ public class eS extends WallpaperCropActivity {
         ActionBar actionBar = getActionBar();
         actionBar.setCustomView(R.layout.actionbar_set_wallpaper);
         actionBar.getCustomView().setOnClickListener(new eZ(this));
-        this.c = findViewById(R.id.set_wallpaper_button);
+        this.c = actionBar.getCustomView().findViewById(R.id.set_wallpaper_button);
         this.h = new fa(this);
     }
 
@@ -463,7 +463,7 @@ public class eS extends WallpaperCropActivity {
         this.g = findViewById(R.id.wallpaper_strip);
         if (this.g.getAlpha() < 1.0f) {
             this.g.setAlpha(1.0f);
-            this.g.setVisibility(0);
+            this.g.setVisibility(View.VISIBLE);
         }
     }
 }

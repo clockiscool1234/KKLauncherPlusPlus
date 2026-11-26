@@ -15,6 +15,10 @@ public final class C0189e extends BackupManager {
         return BackupManager.listBackups();
     }
 
+    public static List b(Context context) {
+        return BackupManager.listBackups(context);
+    }
+
     public static JSONObject b(File file) throws IOException {
         return BackupManager.readBackup(file);
     }
