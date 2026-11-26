@@ -1,8 +1,8 @@
 package com.android.launcher3;
 
-import a.a.a.c.d;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -16,10 +16,15 @@ import android.util.Log;
 import android.widget.Toast;
 import org.xmlpull.v1.XmlPullParser;
 import java.io.InputStream;
+import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.LinkedHashMap;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public final class IconPackSupport {
@@ -65,7 +70,7 @@ public final class IconPackSupport {
                 }
                 editor.apply();
                 FILTERS.clear();
-                d.b(activity, true);
+                AppCustomizationManager.refreshAll();
                 dialog.dismiss();
             })
             .setNegativeButton(android.R.string.cancel, null)
@@ -163,7 +168,64 @@ public final class IconPackSupport {
         }
     }
 
-    private static List<ResolveInfo> findInstalledPacks(Context context) {
+    public static final class PackIcon {
+        public final String name;
+        public final Drawable drawable;
+        public final boolean mappedToApp;
+
+        PackIcon(String name, Drawable drawable, boolean mappedToApp) {
+            this.name = name;
+            this.drawable = drawable;
+            this.mappedToApp = mappedToApp;
+        }
+    }
+
+    @SuppressLint("DiscouragedApi")
+    public static List<PackIcon> getPackIcons(Context context, String packageName) {
+        ArrayList<PackIcon> icons = new ArrayList<>();
+        try {
+            Resources resources = context.getPackageManager().getResourcesForApplication(packageName);
+            Set<String> mappedNames = new LinkedHashSet<>(loadFilter(resources, packageName).values());
+            Set<String> allNames = new LinkedHashSet<>(mappedNames);
+            try {
+                Context packContext = context.createPackageContext(packageName, Context.CONTEXT_INCLUDE_CODE | Context.CONTEXT_IGNORE_SECURITY);
+                for (String type : new String[] {"drawable", "mipmap"}) {
+                    Class<?> resourceClass = Class.forName(packageName + ".R$" + type, false, packContext.getClassLoader());
+                    for (Field field : resourceClass.getDeclaredFields()) {
+                        if (Modifier.isStatic(field.getModifiers()) && field.getType() == int.class) {
+                            try {
+                                int resourceId = field.getInt(null);
+                                String name = resources.getResourceEntryName(resourceId);
+                                allNames.add(name);
+                            } catch (Exception ignored) {
+                            }
+                        }
+                    }
+                }
+            } catch (Exception ignored) {
+            }
+            ArrayList<String> names = new ArrayList<>(allNames);
+            Collections.sort(names, String.CASE_INSENSITIVE_ORDER);
+            for (String name : names) {
+                int resourceId = resources.getIdentifier(name, "drawable", packageName);
+                if (resourceId == 0) {
+                    resourceId = resources.getIdentifier(name, "mipmap", packageName);
+                }
+                if (resourceId == 0) {
+                    continue;
+                }
+                try {
+                    icons.add(new PackIcon(name, resources.getDrawable(resourceId), mappedNames.contains(name)));
+                } catch (Resources.NotFoundException ignored) {
+                }
+            }
+        } catch (PackageManager.NameNotFoundException | RuntimeException exception) {
+            Log.w(TAG, "Unable to enumerate icon pack " + packageName, exception);
+        }
+        return icons;
+    }
+
+    public static List<ResolveInfo> findInstalledPacks(Context context) {
         PackageManager packageManager = context.getPackageManager();
         LinkedHashMap<String, ResolveInfo> packs = new LinkedHashMap<>();
         for (String action : THEME_ACTIONS) {

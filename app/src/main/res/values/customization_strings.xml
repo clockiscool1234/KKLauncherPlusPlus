@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_custom_names_toggle_label" translatable="false">Enable custom names and icons</string>
-    <string name="app_custom_names_help" translatable="false">Choose an app to rename it, select an image for its icon, or reset its appearance. Icon files are selected individually; no broad storage permission is needed.</string>
+    <string name="app_custom_names_help" translatable="false">Choose an app to rename it, select a built-in, app, icon-pack, or picture icon, or reset its appearance. Icon files are selected individually; no broad storage permission is needed.</string>
+    <string name="edit_target_label" translatable="false">Edit</string>
+    <string name="search_logo_google" translatable="false">Google logo (default)</string>
+    <string name="search_logo_magnifier" translatable="false">Magnifying glass</string>
+    <string name="search_logo_picture" translatable="false">Use a picture</string>
+    <string name="search_logo_choose_picture" translatable="false">Choose picture</string>
+    <string name="search_logo_picture_help" translatable="false">Choose a picture from your device to use as the search bar logo.</string>
+    <string name="search_logo_activity_title" translatable="false">Search bar logo</string>
+
 </resources>

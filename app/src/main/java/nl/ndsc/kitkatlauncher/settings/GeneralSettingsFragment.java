@@ -25,15 +25,6 @@ public class GeneralSettingsFragment extends r {
     @Override // nl.ndsc.kitkatlauncher.b.r
     protected final void a(String str) {
         super.a(str);
-        if (str.equals("setting_icons")) {
-            b().a(new nl.ndsc.kitkatlauncher.b.l());
-        }
-        if (str.equals("setting_icon_pack")) {
-            com.android.launcher3.IconPackSupport.showPicker(getActivity());
-        }
-        if ("setting_app_appearance".equals(str)) {
-            startActivity(new android.content.Intent(getActivity(), nl.ndsc.kitkatlauncher.AppCustomizationActivity.class));
-        }
     }
 
     @Override // nl.ndsc.kitkatlauncher.b.r

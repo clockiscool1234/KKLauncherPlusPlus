@@ -12,6 +12,9 @@ public final class s extends r {
         if (str.equals("pref_main_general")) {
             b().a(new g());
         }
+        if (str.equals("pref_main_appearance")) {
+            b().a(new nl.ndsc.kitkatlauncher.settings.AppearanceSettingsFragment());
+        }
         if (str.equals("pref_main_screens")) {
             b().a(new t());
         }

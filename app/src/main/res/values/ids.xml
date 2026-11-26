@@ -99,4 +99,7 @@
     <id name="focused_hotseat_app_title" />
     <id name="focused_hotseat_app_description" />
     <id name="menu_delete" />
+    <id name="search_logo_google_choice" />
+    <id name="search_logo_magnifier_choice" />
+    <id name="search_logo_picture_choice" />
 </resources>

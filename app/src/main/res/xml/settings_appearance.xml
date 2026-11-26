@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="Appearance">
+        <Preference android:title="App names and icons" android:key="setting_app_appearance" android:summary="Rename apps and choose replacement icons" />
+        <Preference android:title="Icon size" android:key="setting_icons" android:summary="Change icon and label sizes" />
+        <Preference android:title="Icon pack" android:key="setting_icon_pack" android:summary="Choose a compatible icon theme" />
+        <Preference android:title="Search bar logo" android:key="setting_searchbar_logo" android:summary="Choose the Google logo, magnifying glass, or your own image" />
+        <SwitchPreference android:title="Show Edit action while moving apps" android:key="setting_edit_drop_target_enabled" android:defaultValue="true" android:summary="Show the pencil action beside Remove and App info" />
+    </PreferenceCategory>
+</PreferenceScreen>

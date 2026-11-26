@@ -17,7 +17,9 @@ The original Launcher+ used application ID `nl.ndsc.kitkatlauncher`, version 1.2
 ## Features in this branch
 
 - Set the dock to 3, 5, 7, or 9 columns.
-- Rename individual apps and choose custom icons in **Settings → General → App names and icons**. The appearance override can be switched off from that screen.
+- In **Settings → Appearance**, change icon and label sizes, choose icon packs, customize app names and icons, choose the search-bar logo, and toggle the drag-bar **Edit** action. App icons can use Android system icons, icons from installed apps, mapped or unused icons from installed icon packs, or a picture. The default search-bar logo is the supplied Google wordmark; the magnifying-glass icon and a custom picture are also available.
+- Changing the icon pack reloads launcher icons on both the home screen and app drawer. A custom app icon stays in place; resetting it returns that app to the selected pack or its original icon.
+- Custom app names and icons can be switched off from the App names and icons screen.
 - Hide apps from the drawer and create or restore launcher backups without a Pro key. Backup and restore use Android's document picker, so they do not require broad storage permissions; backups include home-screen and dock entries.
 - Seed available Phone, Messages, Browser, Camera, and Gallery/Photos apps into open dock/home-screen positions on first launch, while avoiding duplicate app entries.
 - Apply compatible icon packs using the common `appfilter.xml` format, including Nova-, Apex-, and ADW-style packs.

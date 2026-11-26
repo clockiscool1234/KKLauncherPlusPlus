@@ -58,6 +58,7 @@
         <activity android:label="Restore backup" android:name="nl.ndsc.kitkatlauncher.RestoreActivity" android:parentActivityName="nl.ndsc.kitkatlauncher.SettingsActivity" android:theme="@style/HoloLightTheme"/>
         <activity android:label="@string/application_name" android:name="nl.ndsc.kitkatlauncher.SettingsActivity" android:parentActivityName="nl.ndsc.kitkatlauncher.KLPLauncher" android:theme="@style/HoloLightTheme"/>
         <activity android:exported="false" android:label="Customize apps" android:name="nl.ndsc.kitkatlauncher.AppCustomizationActivity" android:parentActivityName="nl.ndsc.kitkatlauncher.SettingsActivity" android:theme="@style/HoloLightTheme"/>
+        <activity android:exported="false" android:label="Search bar logo" android:name="nl.ndsc.kitkatlauncher.SearchBarLogoSettingsActivity" android:parentActivityName="nl.ndsc.kitkatlauncher.SettingsActivity" android:theme="@style/HoloLightTheme"/>
         <receiver android:exported="true" android:name="com.android.launcher3.PreloadReceiver" android:permission="com.clockiscool.kklauncherplusplus.permission.PRELOAD_WORKSPACE">
             <intent-filter>
                 <action android:name="com.android.launcher3.action.PRELOAD_WORKSPACE"/>
