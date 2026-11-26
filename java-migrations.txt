@@ -2,6 +2,7 @@ Java sources compiled into app/src/main/java/:
 
 - a.a.a.c.d
 - com.android.launcher3.Hotseat
+- com.android.launcher3.eS
 - com.android.launcher3.cB
 - com.android.launcher3.IconCache
 - com.android.launcher3.IconCacheEntry
@@ -24,4 +25,6 @@ Java sources compiled into app/src/main/java/:
 
 The b.a and b.g classes are compatibility wrappers required by the legacy settings navigation. The readable implementations are in settings.AboutSettingsFragment and settings.GeneralSettingsFragment.
 
-The remaining recovered Java sources are under app/src/reconstructed/java/ and are not part of the Gradle source set yet. Their names are still partly obfuscated; migrations will proceed incrementally while preserving compatibility with the remaining bytecode. The migrated cB source handles Android 13+ dynamic receiver registration with RECEIVER_NOT_EXPORTED for system broadcasts.
+The wallpaper picker eS is now compiled from app/src/main/java/com/android/launcher3/eS.java. The Gradle build creates a filtered copy of launcher-legacy.jar without its old eS.class, avoiding duplicate definitions while keeping the original library unchanged. eS preserves the original callback bridge signatures and uses a MediaStore sort order without the unsupported SQL LIMIT token.
+
+The remaining recovered Java sources are under app/src/reconstructed/java/ and are not part of the Gradle source set yet. Their names are still partly obfuscated; migrations will proceed incrementally while preserving compatibility with the remaining bytecode. The migrated cB source handles Android 13+ dynamic receiver registration with RECEIVER_NOT_EXPORTED for system broadcasts. Hotseat and nl.ndsc.kitkatlauncher.o retain the exact static method/field signatures used by legacy bytecode.

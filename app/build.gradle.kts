@@ -2,6 +2,14 @@ plugins {
     id("com.android.application")
 }
 
+val filteredLegacyJar = tasks.register<Jar>("filteredLegacyJar") {
+    archiveFileName.set("launcher-legacy-filtered.jar")
+    destinationDirectory.set(layout.buildDirectory.dir("filtered-libs"))
+    from(zipTree("libs/launcher-legacy.jar")) {
+        exclude("com/android/launcher3/eS.class")
+    }
+}
+
 android {
     namespace = "nl.ndsc.kitkatlauncher"
     compileSdk = 36
@@ -33,5 +41,5 @@ android {
 
 dependencies {
     compileOnly(files("libs/launcher-compile-only.jar"))
-    runtimeOnly(files("libs/launcher-legacy.jar"))
+    runtimeOnly(files(filteredLegacyJar))
 }

@@ -56,6 +56,10 @@ public class Hotseat extends FrameLayout {
         return this.f88a;
     }
 
+    static Launcher a(Hotseat hotseat) {
+        return hotseat.b;
+    }
+
     public final void a(Launcher launcher) {
         this.b = launcher;
         setOnKeyListener(new bv());

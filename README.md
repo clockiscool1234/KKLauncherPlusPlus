@@ -7,7 +7,8 @@
 - **Version:** `1.0.0-rebrand` (version code `10000`)
 - **Minimum Android:** Android 7.0 (API 24)
 - **Target SDK:** Android 13 (API 33), for compatibility with the original Launcher bytecode’s receiver registrations
-- **Compile SDK:** Android 16 (API 36); runs on Android 12–16
+- **Compile SDK:** Android 16 (API 36)
+- **Compatibility goal:** Android 12–16; minimum API 24. Target SDK remains 33 until the legacy Launcher receiver registrations are migrated.
 - **Base:** Launcher+ 1.2.7, based on the Android Launcher3 codebase
 - **Active development branch:** `modernized-rebrand`
 
@@ -47,9 +48,15 @@ Build outputs:
 
 The debug APK uses the build environment’s debug signing key and cannot update an installed copy signed by another key. GitHub-hosted runners are recreated, so successive CI debug APKs may also have different keys; if Android reports a signature mismatch, back up the launcher layout/data before uninstalling the older build.
 
-## Startup-crash note
+## Compatibility fixes and test status
 
-A reported `Resources$NotFoundException` for `0x7f090008` was caused by AAPT2 assigning new resource IDs while unreconstructed Launcher3 bytecode still contains original IDs. `app/legacy-resource-ids.txt` pins the recovered IDs. An earlier `NoSuchFieldError` was fixed by restoring fields `a` and `b` in `a.a.a.c.d`. The URI-field crash was fixed by restoring `dG.a` as a public static `Uri`, while keeping the readable alias used by Java sources. The `RECEIVER_EXPORTED` crash came from the unmigrated Launcher class calling the old two-argument `registerReceiver`; target SDK remains 33 until that class is migrated. The rebuilt APK installs and starts on an Android 12 AVD, and the reported `dG.a` error no longer appears. This server must use very slow software emulation, which caused Android system ANRs, so verify full launcher behaviour on a physical device or accelerated emulator.
+- AAPT2 resource IDs are pinned in `app/legacy-resource-ids.txt` so unreconstructed Launcher3 bytecode continues to find its original resources.
+- Reconstructed `Hotseat` now includes the static accessor expected by legacy drawer-click code (`Hotseat.a(Hotseat)`).
+- The settings feature flag exposes the original `o.a` field alongside the Java-source alias `f438a`; both remain enabled to preserve this branch's existing feature availability.
+- The wallpaper picker is now compiled from `app/src/main/java/com/android/launcher3/eS.java`. Its recent-image query no longer appends SQLite `LIMIT` to the sort order, which modern MediaStore rejects; it safely reads the first row and closes the cursor. Gradle removes the duplicate old `eS.class` from the packaged legacy JAR.
+- Earlier reported resource-ID, launcher URI-field, and receiver-registration failures have separate fixes documented above; the legacy Launcher still keeps target SDK at 33.
+
+Both debug and release APKs build locally. A fresh Android 12 emulator interaction test was blocked because the host lacks `/dev/kvm`, and its x86_64 emulator refuses to boot without hardware acceleration. The latest drawer, settings, and wallpaper fixes still need a device smoke test; build success alone does not prove those screens work.
 
 ## GitHub Actions
 
@@ -58,11 +65,11 @@ A reported `Resources$NotFoundException` for `0x7f090008` was caused by AAPT2 as
 ## Source layout and current limitations
 
 - `app/src/main/AndroidManifest.xml` and `app/src/main/res/` contain the active manifest and Android resources.
-- `app/src/main/java/` contains the Java files currently compiled into the APK, including the rebrand features and compatibility wrappers used by the legacy settings navigation. See `java-migrations.txt` for the list.
+- `app/src/main/java/` contains the Java files currently compiled into the APK, including the rebrand features, wallpaper picker override, and compatibility wrappers used by legacy code. See `java-migrations.txt` for the list.
 - The recovered `com.android.launcher3.cB` source compiles into the APK and sets `RECEIVER_NOT_EXPORTED` for its system-only receivers. The remaining legacy Launcher receiver calls are why target SDK stays at 33 for now.
 - `app/src/reconstructed/java/` holds recovered Java that is not yet part of the Gradle source set.
 - `app/libs/launcher-legacy.jar` supplies the original bytecode for classes not yet migrated. It is packaged into the APK; it is not the original signed APK.
 - `app/libs/launcher-compile-only.jar` supplies compatibility signatures for the migrated sources and is not packaged.
 - The smali source tree has been removed. This remains a staged reconstruction—not yet a complete, fully de-obfuscated Java rewrite.
 
-The APK has buildable source and the resource-ID mapping is preserved. The fixes for the reported startup exceptions are not a substitute for device testing; verify the next APK on the affected Android version before treating this as stable.
+The APK has buildable source and the resource-ID mapping is preserved. Runtime support across Android 12–16 remains under active verification; the newly fixed drawer, settings, and wallpaper flows are not yet confirmed on-device.
