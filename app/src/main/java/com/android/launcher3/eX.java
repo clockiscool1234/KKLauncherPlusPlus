@@ -20,8 +20,8 @@ final class eX extends DataSetObserver {
     @Override // android.database.DataSetObserver
     public final void onChanged() {
         this.b.removeAllViews();
-        this.f324a.a(this.b, this.c, false);
-        this.f324a.g();
-        this.f324a.i();
+        eS.a(this.f324a, this.b, this.c, false);
+        eS.h(this.f324a);
+        eS.i(this.f324a);
     }
 }

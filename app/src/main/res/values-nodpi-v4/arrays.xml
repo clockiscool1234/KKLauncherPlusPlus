@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <array name="wallpapers" />
+    <string-array name="wallpapers">
+        <item>default_wallpaper</item>
+        <item>wallpaper_15</item>
+        <item>wallpaper_16</item>
+        <item>wallpaper_17</item>
+        <item>wallpaper_19</item>
+        <item>wallpaper_20</item>
+        <item>wallpaper_22</item>
+        <item>wallpaper_50</item>
+        <item>wallpaper_51</item>
+    </string-array>
 </resources>

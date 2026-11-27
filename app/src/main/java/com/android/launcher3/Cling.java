@@ -86,6 +86,10 @@ public class Cling extends FrameLayout implements View.OnClickListener, View.OnL
         setClickable(true);
     }
 
+    static View a(Cling cling) {
+        return cling.H;
+    }
+
     private Rect a(DisplayMetrics displayMetrics) {
         int i2 = displayMetrics.widthPixels / 2;
         int i3 = displayMetrics.heightPixels / 2;
@@ -299,11 +303,16 @@ public class Cling extends FrameLayout implements View.OnClickListener, View.OnL
                 alpha *= viewFindViewById.getAlpha();
             }
             if (hasType(f76a) || hasType(b)) {
-                View viewFindViewById2 = findViewById(R.id.bubble_content);
-                Rect rect = new Rect();
-                viewFindViewById2.getGlobalVisibleRect(rect);
-                this.F.setAlpha((int) (alpha * 255.0f));
-                canvas.drawCircle(displayMetrics.widthPixels / 2, rect.centerY(), Math.min(aI.a(p, displayMetrics), (viewFindViewById2.getMeasuredWidth() + aI.a(o, displayMetrics)) / 2.0f), this.F);
+                View bubbleContent = findViewById(R.id.bubble_content);
+                Rect bubbleBounds = new Rect();
+                int[] clingLocation = new int[2];
+                if (bubbleContent != null && bubbleContent.getGlobalVisibleRect(bubbleBounds)) {
+                    getLocationOnScreen(clingLocation);
+                    bubbleBounds.offset(-clingLocation[0], -clingLocation[1]);
+                    this.F.setAlpha((int) (alpha * 255.0f));
+                    float radius = Math.min(aI.a(p, displayMetrics), (bubbleContent.getMeasuredWidth() + aI.a(o, displayMetrics)) / 2.0f);
+                    canvas.drawCircle(bubbleBounds.centerX(), bubbleBounds.centerY(), radius, this.F);
+                }
             } else if (hasType(c) || hasType(d) || hasType(e)) {
                 Rect rectA2 = a(displayMetrics);
                 this.D.setAlpha(128);

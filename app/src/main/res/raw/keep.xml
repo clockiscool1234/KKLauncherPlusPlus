@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:keep="@drawable/default_wallpaper,@drawable/default_wallpaper_small,@drawable/wallpaper_15,@drawable/wallpaper_15_small,@drawable/wallpaper_16,@drawable/wallpaper_16_small,@drawable/wallpaper_17,@drawable/wallpaper_17_small,@drawable/wallpaper_19,@drawable/wallpaper_19_small,@drawable/wallpaper_20,@drawable/wallpaper_20_small,@drawable/wallpaper_22,@drawable/wallpaper_22_small,@drawable/wallpaper_50,@drawable/wallpaper_50_small,@drawable/wallpaper_51,@drawable/wallpaper_51_small" />

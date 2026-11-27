@@ -106,6 +106,14 @@ final class cG {
         this.f214a.h().post(new cL(this));
     }
 
+    static Launcher a(cG controller) {
+        return controller.f214a;
+    }
+
+    static void a(cG controller, Cling cling, Runnable runnable, String preferenceKey, int duration, boolean clearSystemUiFlag) {
+        controller.a(cling, runnable, preferenceKey, duration, clearSystemUiFlag);
+    }
+
     public final boolean a() {
         Cling cling = (Cling) this.f214a.findViewById(R.id.folder_cling);
         return cling != null && cling.getVisibility() == View.VISIBLE;

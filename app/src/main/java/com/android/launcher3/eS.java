@@ -149,6 +149,62 @@ public class eS extends WallpaperCropActivity {
         view.announceForAccessibility(eSVar.getString(R.string.announce_selection, new Object[]{view.getContentDescription()}));
     }
 
+    static View a(eS wallpaperPicker) {
+        return wallpaperPicker.c;
+    }
+
+    static void a(eS wallpaperPicker, ActionMode actionMode) {
+        wallpaperPicker.i = actionMode;
+    }
+
+    static void a(eS wallpaperPicker, boolean selecting) {
+        wallpaperPicker.d = selecting;
+    }
+
+    static View b(eS wallpaperPicker) {
+        return wallpaperPicker.g;
+    }
+
+    static boolean c(eS wallpaperPicker) {
+        return wallpaperPicker.d;
+    }
+
+    static ActionMode d(eS wallpaperPicker) {
+        return wallpaperPicker.i;
+    }
+
+    static View.OnLongClickListener e(eS wallpaperPicker) {
+        return wallpaperPicker.j;
+    }
+
+    static ActionMode.Callback f(eS wallpaperPicker) {
+        return wallpaperPicker.h;
+    }
+
+    static LinearLayout g(eS wallpaperPicker) {
+        return wallpaperPicker.f;
+    }
+
+    static void h(eS wallpaperPicker) {
+        wallpaperPicker.g();
+    }
+
+    static void i(eS wallpaperPicker) {
+        wallpaperPicker.i();
+    }
+
+    static int j(eS wallpaperPicker) {
+        return wallpaperPicker.n;
+    }
+
+    static View.OnClickListener k(eS wallpaperPicker) {
+        return wallpaperPicker.e;
+    }
+
+    static View l(eS wallpaperPicker) {
+        return wallpaperPicker.b;
+    }
+
     private boolean a(File file, Bitmap bitmap) {
         try {
             file.createNewFile();
