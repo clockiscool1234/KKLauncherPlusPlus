@@ -33,5 +33,6 @@ public final class AppearanceSettingsFragment extends r {
     public void onResume() {
         super.onResume();
         c("Appearance");
+        IconPackSupport.updatePreferenceSummary(getActivity());
     }
 }

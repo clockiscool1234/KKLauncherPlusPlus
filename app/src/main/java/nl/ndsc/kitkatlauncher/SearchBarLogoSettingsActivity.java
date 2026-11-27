@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Gravity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -34,6 +35,9 @@ public final class SearchBarLogoSettingsActivity extends Activity {
     protected void onCreate(Bundle state) {
         super.onCreate(state);
         setTitle(R.string.search_logo_activity_title);
+        if (getActionBar() != null) {
+            getActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         LinearLayout root = new LinearLayout(this);
         root.setOrientation(LinearLayout.VERTICAL);
@@ -74,6 +78,15 @@ public final class SearchBarLogoSettingsActivity extends Activity {
         setContentView(root);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     private RadioButton option(int id, String label) {
         RadioButton button = new RadioButton(this);
         button.setId(id);
@@ -112,6 +125,7 @@ public final class SearchBarLogoSettingsActivity extends Activity {
     private int dp(int value) {
         return Math.round(value * getResources().getDisplayMetrics().density);
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

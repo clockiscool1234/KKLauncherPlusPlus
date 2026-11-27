@@ -11,9 +11,28 @@ import nl.ndsc.kitkatlauncher.AppCustomizationActivity;
 
 public final class EditDropTarget extends E {
     private static final String ENABLED_KEY = "setting_edit_drop_target_enabled";
+    private ap registeredController;
 
     public EditDropTarget(android.content.Context context, android.util.AttributeSet attrs) {
         super(context, attrs);
+    }
+
+    public void registerWith(Launcher launcher) {
+        if (launcher == null) {
+            return;
+        }
+        super.a(launcher);
+        super.a(launcher.k());
+        ap controller = launcher.q();
+        if (controller == null || controller == registeredController) {
+            return;
+        }
+        if (registeredController != null) {
+            registeredController.b((aF) this);
+        }
+        controller.a((aF) this);
+        controller.a((aq) this);
+        registeredController = controller;
     }
 
     private boolean isEditEnabled() {
@@ -37,22 +56,34 @@ public final class EditDropTarget extends E {
 
     @Override
     public void a(az source, Object item) {
-        super.a(source, item);
+        boolean visible = isEditEnabled()
+            && source != null
+            && (source.h() || source.i())
+            && componentFor(item) != null;
+        d = visible;
+        setEnabled(visible);
+        if (!visible) {
+            setSelected(false);
+        }
         ViewParent parent = getParent();
         if (parent instanceof ViewGroup) {
-            boolean visible = isEditEnabled() && source != null && source.h() && componentFor(item) != null;
             ((ViewGroup) parent).setVisibility(visible ? View.VISIBLE : View.GONE);
         }
     }
 
     @Override
     public boolean a(aH dragObject) {
-        if (dragObject == null || !isEditEnabled()) {
-            return false;
+        return dragObject != null && isEditEnabled() && componentFor(dragObject.g) != null;
+    }
+
+    @Override
+    public void b(aH dragObject) {
+        if (!a(dragObject)) {
+            return;
         }
         ComponentName component = componentFor(dragObject.g);
         if (component == null) {
-            return false;
+            return;
         }
         Intent edit = new Intent(getContext(), AppCustomizationActivity.class);
         edit.putExtra(AppCustomizationActivity.EXTRA_COMPONENT, component.flattenToString());
@@ -63,6 +94,25 @@ public final class EditDropTarget extends E {
             getContext().startActivity(edit);
         }
         dragObject.k = false;
-        return false;
+        setSelected(false);
+    }
+
+    @Override
+    public void c(aH dragObject) {
+        super.c(dragObject);
+        setSelected(true);
+    }
+
+    @Override
+    public void e(aH dragObject) {
+        super.e(dragObject);
+        setSelected(false);
+    }
+
+    @Override
+    public void c() {
+        super.c();
+        d = false;
+        setSelected(false);
     }
 }

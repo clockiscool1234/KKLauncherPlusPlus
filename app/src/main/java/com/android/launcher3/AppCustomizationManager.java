@@ -10,6 +10,8 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.preference.PreferenceManager;
+import android.view.View;
+import android.view.ViewGroup;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
@@ -200,6 +202,35 @@ public final class AppCustomizationManager {
         }
         if (model.f() != null) {
             model.f().c();
+        }
+    }
+
+    public static void refreshLauncherViews(Launcher launcher) {
+        if (launcher == null || launcher.getWindow() == null) {
+            return;
+        }
+        bw iconCache = cB.a().e();
+        if (iconCache != null) {
+            refreshShortcutViews(launcher.getWindow().getDecorView(), iconCache);
+        }
+    }
+
+    private static void refreshShortcutViews(View view, bw iconCache) {
+        if (view instanceof BubbleTextView) {
+            Object tag = view.getTag();
+            if (tag instanceof ey) {
+                ey shortcut = (ey) tag;
+                if (!shortcut.b && shortcut.d == null && shortcut.a != null && shortcut.a.getComponent() != null) {
+                    shortcut.b((Bitmap) null);
+                    ((BubbleTextView) view).a(shortcut, iconCache);
+                }
+            }
+        }
+        if (view instanceof ViewGroup) {
+            ViewGroup group = (ViewGroup) view;
+            for (int index = 0; index < group.getChildCount(); index++) {
+                refreshShortcutViews(group.getChildAt(index), iconCache);
+            }
         }
     }
 

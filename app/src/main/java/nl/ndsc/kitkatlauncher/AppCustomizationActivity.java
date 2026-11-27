@@ -1,6 +1,7 @@
 package nl.ndsc.kitkatlauncher;
 
 import android.app.Activity;
+import android.view.MenuItem;
 import android.app.AlertDialog;
 import android.content.ComponentName;
 import android.content.Intent;
@@ -37,6 +38,9 @@ public final class AppCustomizationActivity extends Activity {
     protected void onCreate(Bundle state) {
         super.onCreate(state);
         setTitle("App names and icons");
+        if (getActionBar() != null) {
+            getActionBar().setDisplayHomeAsUpEnabled(true);
+        }
 
         LinearLayout root = new LinearLayout(this);
         root.setOrientation(LinearLayout.VERTICAL);
@@ -70,6 +74,15 @@ public final class AppCustomizationActivity extends Activity {
                 appRows.post(() -> openActionsFor(component));
             }
         }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            finish();
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     private int dp(int value) {
@@ -369,6 +382,7 @@ public final class AppCustomizationActivity extends Activity {
             this.drawable = drawable;
         }
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

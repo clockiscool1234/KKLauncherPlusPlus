@@ -12,6 +12,8 @@ import android.content.pm.ResolveInfo;
 import android.content.res.Resources;
 import android.graphics.drawable.Drawable;
 import android.preference.PreferenceManager;
+import android.preference.Preference;
+import android.preference.PreferenceFragment;
 import android.util.Log;
 import android.widget.Toast;
 import org.xmlpull.v1.XmlPullParser;
@@ -48,7 +50,7 @@ public final class IconPackSupport {
         CharSequence[] labels = new CharSequence[packs.size() + 1];
         labels[0] = "Default launcher icons";
         for (int i = 0; i < packs.size(); i++) {
-            labels[i + 1] = packs.get(i).loadLabel(activity.getPackageManager());
+            labels[i + 1] = packLabel(activity.getPackageManager(), packs.get(i));
         }
         String selected = PreferenceManager.getDefaultSharedPreferences(activity).getString(PREFERENCE_KEY, "");
         int checked = 0;
@@ -69,6 +71,7 @@ public final class IconPackSupport {
                     editor.putString(PREFERENCE_KEY, packs.get(which - 1).activityInfo.packageName);
                 }
                 editor.apply();
+                updatePreferenceSummary(activity);
                 FILTERS.clear();
                 AppCustomizationManager.refreshAll();
                 dialog.dismiss();
@@ -225,19 +228,51 @@ public final class IconPackSupport {
         return icons;
     }
 
+    public static void updatePreferenceSummary(Activity activity) {
+        android.app.Fragment fragment = activity.getFragmentManager().findFragmentById(android.R.id.content);
+        if (fragment instanceof PreferenceFragment) {
+            Preference preference = ((PreferenceFragment) fragment).findPreference(PREFERENCE_KEY);
+            if (preference != null) {
+                preference.setSummary(selectedPackLabel(activity));
+            }
+        }
+    }
+
+    public static String selectedPackLabel(Context context) {
+        String selected = PreferenceManager.getDefaultSharedPreferences(context).getString(PREFERENCE_KEY, "");
+        if (selected == null || selected.isEmpty()) {
+            return "Default launcher icons";
+        }
+        PackageManager packageManager = context.getPackageManager();
+        for (ResolveInfo info : findInstalledPacks(context)) {
+            if (selected.equals(info.activityInfo.packageName)) {
+                return packLabel(packageManager, info).toString();
+            }
+        }
+        return "Selected icon pack is not installed";
+    }
+
+    private static CharSequence packLabel(PackageManager packageManager, ResolveInfo info) {
+        CharSequence label = packageManager.getApplicationLabel(info.activityInfo.applicationInfo);
+        if (label == null || label.length() == 0) {
+            label = info.loadLabel(packageManager);
+        }
+        return label == null ? info.activityInfo.packageName : label;
+    }
+
     public static List<ResolveInfo> findInstalledPacks(Context context) {
         PackageManager packageManager = context.getPackageManager();
         LinkedHashMap<String, ResolveInfo> packs = new LinkedHashMap<>();
         for (String action : THEME_ACTIONS) {
             Intent intent = new Intent(action);
-            for (ResolveInfo info : packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)) {
+            for (ResolveInfo info : packageManager.queryIntentActivities(intent, 0)) {
                 if (info.activityInfo != null) {
                     packs.put(info.activityInfo.packageName, info);
                 }
             }
         }
         ArrayList<ResolveInfo> result = new ArrayList<>(packs.values());
-        result.sort((left, right) -> left.loadLabel(packageManager).toString().compareToIgnoreCase(right.loadLabel(packageManager).toString()));
+        result.sort((left, right) -> packLabel(packageManager, left).toString().compareToIgnoreCase(packLabel(packageManager, right).toString()));
         return result;
     }
 }
