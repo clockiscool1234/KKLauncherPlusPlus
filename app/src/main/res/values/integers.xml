@@ -2,7 +2,7 @@
 <resources>
     <integer name="config_dynamic_grid_max_long_edge_cell_count">6</integer>
     <integer name="config_dynamic_grid_max_short_edge_cell_count">5</integer>
-    <integer name="config_dynamic_grid_min_edge_cell_count">3</integer>
+    <integer name="config_dynamic_grid_min_edge_cell_count">5</integer>
     <integer name="config_dynamic_grid_overview_icon_zone_percentage">20</integer>
     <integer name="config_dynamic_grid_overview_scale_percentage">80</integer>
     <integer name="config_maxNumberOfPageIndicatorsToShow">21</integer>

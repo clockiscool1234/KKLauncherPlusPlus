@@ -16,9 +16,9 @@ The original Launcher+ used application ID `nl.ndsc.kitkatlauncher`, version 1.2
 
 ## Features in this branch
 
-- Set the dock to 3, 5, 7, or 9 columns.
+- Use a five-column default home-screen grid on phones; set the dock to 3, 5, 7, or 9 columns.
 - In **Settings → Appearance**, change icon and label sizes, choose icon packs, customize app names and icons, choose the search-bar logo, and toggle the drag-bar **Edit** action. App icons can use Android system icons, icons from installed apps, mapped or unused icons from installed icon packs, or a picture. The default search-bar logo is the supplied Google wordmark; the magnifying-glass icon and a custom picture are also available.
-- Changing the icon pack reloads launcher icons on both the home screen and app drawer. A custom app icon stays in place; resetting it returns that app to the selected pack or its original icon.
+- Changing the icon pack refreshes matching icons immediately across home screens, the dock, and visible app-drawer pages. A custom app icon stays in place; resetting it returns that app to the selected pack or its original icon.
 - Custom app names and icons can be switched off from the App names and icons screen.
 - Hide apps from the drawer and create or restore launcher backups without a Pro key. Backup and restore use Android's document picker, so they do not require broad storage permissions; backups include home-screen and dock entries.
 - Seed available Phone, Messages, Browser, Camera, and Gallery/Photos apps into open dock/home-screen positions on first launch, while avoiding duplicate app entries.
@@ -59,12 +59,15 @@ Debug signing keys are environment-specific. A debug APK may not update an insta
 - The wallpaper picker (`eS`) and its data-set observer (`eX`) are both compiled from Java, so they use matching instance-method calls instead of the incompatible legacy callback that caused `NoSuchMethodError`. The recent-image query avoids the unsupported SQL `LIMIT` sort-order token and closes its cursor.
 - Android 11+ package visibility explicitly queries launcher activities. The app-list model filters KKLauncher++ itself out of its own drawer.
 - Backups are created with `ACTION_CREATE_DOCUMENT` and restored with `ACTION_OPEN_DOCUMENT`; the picker grants access only to the selected file. Restore warns that it replaces the current layout. The backup includes dock rows and launcher settings, and restores through one provider batch.
-- A first-run startup crash from calling `String.equals()` on a missing workspace-cling value is fixed with a null-safe comparison.
+- `Cling` is compiled from Java with null-safe workspace-cling checks, preventing the first-run `String.equals()` crash when the cling mode is missing. Its focused-item views are also guarded when absent from tablet layouts.
+- The legacy content-observer call `cB.a(cB):cO` is restored, fixing the `NoSuchMethodError` triggered while launcher settings change.
+- The Edit drag target uses the same non-destructive drop contract as the built-in Info target, so editing an app does not remove its home-screen shortcut.
+- The provided KK++ image is now the adaptive and density-specific application icon.
 - The duplicate `Icon Settings` preference has been removed.
 - The Gradle task `patchLegacyCanvasClasses` changes `Region.Op.REPLACE` field references to `INTERSECT` in the legacy `BubbleTextView` and `Workspace` class files. Modern Android only permits `INTERSECT` and `DIFFERENCE` for `Canvas.clipRect`. The task patches a generated copy of `launcher-legacy.jar`; the checked-in JAR is unchanged.
 - The launcher also contains earlier fixes for the URI-field and receiver-registration crashes reported during testing.
 
-The debug APK and lint checks build locally with the Android 16 SDK. Runtime changes have not been verified on a physical device; emulator testing is intentionally skipped.
+The debug APK and lint checks build locally with the Android 16 SDK. Lint passes with three existing tablet-layout consistency warnings for the optional focused-hotseat cling views. Runtime behavior has not been re-tested on a device or emulator, as requested.
 
 ## GitHub Actions
 

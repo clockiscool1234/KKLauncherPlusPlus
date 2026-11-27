@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.lang.ref.WeakReference;
 import java.util.UUID;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -22,12 +23,21 @@ import org.json.JSONObject;
 public final class AppCustomizationManager {
     private static final String ENABLED_KEY = "custom_app_appearance_enabled";
     private static final String OVERRIDES_KEY = "custom_app_appearance_v1";
+    private static volatile WeakReference<Launcher> activeLauncher = new WeakReference<>(null);
 
     private AppCustomizationManager() {
     }
 
+    public static void setActiveLauncher(Launcher launcher) {
+        activeLauncher = new WeakReference<>(launcher);
+    }
+
     public static boolean isEnabled(Context context) {
         return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(ENABLED_KEY, true);
+    }
+
+    public static float iconSizeScale(Context context) {
+        return Float.parseFloat(PreferenceManager.getDefaultSharedPreferences(context).getString("setting_iconsize", "1"));
     }
 
     public static void setEnabled(Context context, boolean enabled) {
@@ -226,6 +236,9 @@ public final class AppCustomizationManager {
                 }
             }
         }
+        if (view instanceof PagedViewIcon) {
+            ((PagedViewIcon) view).refreshIcon(iconCache);
+        }
         if (view instanceof ViewGroup) {
             ViewGroup group = (ViewGroup) view;
             for (int index = 0; index < group.getChildCount(); index++) {
@@ -241,6 +254,10 @@ public final class AppCustomizationManager {
         }
         if (model.f() != null) {
             model.f().c();
+        }
+        Launcher launcher = activeLauncher.get();
+        if (launcher != null) {
+            launcher.runOnUiThread(() -> refreshLauncherViews(launcher));
         }
     }
 }

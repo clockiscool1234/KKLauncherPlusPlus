@@ -27,6 +27,7 @@ public class KLPLauncher extends Launcher {
     @Override
     protected void onResume() {
         super.onResume();
+        AppCustomizationManager.setActiveLauncher(this);
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         String selectedIconPack = preferences.getString(IconPackSupport.PREFERENCE_KEY, "");
         if (selectedIconPack == null) {

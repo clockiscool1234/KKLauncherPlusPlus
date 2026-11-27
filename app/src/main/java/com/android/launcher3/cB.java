@@ -80,6 +80,10 @@ public final class cB implements an {
         return l;
     }
 
+    static cO a(cB state) {
+        return state.c;
+    }
+
     public static void a(Context context) {
         if (k != null) {
             Log.w("Launcher", "setApplicationContext called twice! old=" + k + " new=" + context);

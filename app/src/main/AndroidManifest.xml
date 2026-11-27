@@ -33,7 +33,7 @@
     <uses-permission android:name="com.clockiscool.kklauncherplusplus.permission.WRITE_SETTINGS"/>
     <uses-permission android:name="com.clockiscool.kklauncherplusplus.permission.RECEIVE_LAUNCH_BROADCASTS"/>
     <uses-feature android:name="android.hardware.telephony" android:required="false"/>
-    <application android:hardwareAccelerated="true" android:icon="@drawable/ic_launcher" android:label="@string/application_name" android:largeHeap="@bool/config_largeHeap" android:name="com.android.launcher3.LauncherApplication" android:supportsRtl="true">
+    <application android:hardwareAccelerated="true" android:icon="@mipmap/ic_launcher_application" android:label="@string/application_name" android:largeHeap="@bool/config_largeHeap" android:name="com.android.launcher3.LauncherApplication" android:supportsRtl="true">
         <activity android:clearTaskOnLaunch="true" android:exported="true" android:launchMode="singleTask" android:name="nl.ndsc.kitkatlauncher.KLPLauncher" android:screenOrientation="nosensor" android:stateNotNeeded="true" android:theme="@style/Theme" android:windowSoftInputMode="adjustPan">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

@@ -73,17 +73,12 @@ public final class EditDropTarget extends E {
 
     @Override
     public boolean a(aH dragObject) {
-        return dragObject != null && isEditEnabled() && componentFor(dragObject.g) != null;
-    }
-
-    @Override
-    public void b(aH dragObject) {
-        if (!a(dragObject)) {
-            return;
+        if (dragObject == null || !isEditEnabled()) {
+            return false;
         }
         ComponentName component = componentFor(dragObject.g);
         if (component == null) {
-            return;
+            return false;
         }
         Intent edit = new Intent(getContext(), AppCustomizationActivity.class);
         edit.putExtra(AppCustomizationActivity.EXTRA_COMPONENT, component.flattenToString());
@@ -95,6 +90,7 @@ public final class EditDropTarget extends E {
         }
         dragObject.k = false;
         setSelected(false);
+        return false;
     }
 
     @Override
